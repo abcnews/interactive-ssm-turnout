@@ -1,0 +1,240 @@
+.root {
+  margin-top: 1rem;
+  color: #5C6C70;
+  line-height: 1;
+}
+
+.axisName {
+  font-weight: bold;
+}
+
+.xAxisName {
+  composes: axisName;
+  max-width: 6rem;
+}
+
+.yAxisName {
+  composes: axisName;
+  text-align: center;
+}
+
+.grid {
+  position: relative;
+  margin: 1rem 1.125rem 1.625rem 2.125rem;
+  border: .125rem solid #D9DFE0;
+  border-top-width: 0;
+  border-right-width: 0;
+  padding-top: 60%;
+  height: 0;
+  font-size: .75rem;
+}
+
+.gridline {
+  opacity: .3;
+  position: absolute;
+  width: .125rem;
+  height: .125rem;
+  background: #D9DFE0;
+}
+
+.xGridline {
+  composes: gridline;
+  transform: translate(-50%, 0);
+  bottom: 0;
+}
+
+.yGridline {
+  composes: gridline;
+  transform: translate(0, 50%);
+  left: 0;
+}
+
+.midXGridline {
+  composes: xGridline;
+  left: 50%;
+  height: 100%;
+}
+
+.midYGridline {
+  composes: yGridline;
+  bottom: 50%;
+  width: 100%;
+}
+
+.group1XGridline {
+  composes: xGridline;
+  background: #3EBCD9;
+}
+
+.group2XGridline {
+  composes: xGridline;
+  background: #D97D3F;
+}
+
+.group3XGridline {
+  composes: xGridline;
+  background: #40B8A3;
+}
+
+.group1YGridline {
+  composes: yGridline;
+  background: #3EBCD9;
+}
+
+.group2YGridline {
+  composes: yGridline;
+  background: #D97D3F;
+}
+
+.group3YGridline {
+  composes: yGridline;
+  background: #40B8A3
+}
+
+.label {
+  position: absolute;
+}
+
+.xLabel {
+  composes: label;
+  top: 100%;
+  transform: translate(-50%, .375rem);
+} 
+
+.yLabel {
+  composes: label;
+  right: 100%;
+  transform: translate(-.375rem, 50%);
+} 
+
+.minLabel {
+  composes: yLabel;
+  top: 100%;
+}
+
+.maxXLabel {
+  composes: xLabel;
+  left: 100%;
+}
+
+.maxYLabel {
+  composes: yLabel;
+  bottom: 100%;
+}
+
+.groupLabel {
+  font-weight: bold;
+}
+
+.groupXLabel {
+  composes: groupLabel;
+  composes: xLabel;
+}
+
+.groupYLabel {
+  composes: groupLabel;
+  composes: yLabel;
+}
+
+.group1Text {
+  color: #007D99;
+}
+
+.group2Text {
+  color: #C44B00;
+}
+
+.group3Text {
+  color: #07856E;
+}
+
+.group1XLabel {
+  composes: group1Text;
+  composes: groupXLabel;
+}
+
+.group2XLabel {
+  composes: group2Text;
+  composes: groupXLabel;
+}
+
+.group3XLabel {
+  composes: group3Text;
+  composes: groupXLabel;
+}
+
+.group1YLabel {
+  composes: group1Text;
+  composes: groupYLabel;
+}
+
+.group2YLabel {
+  composes: group2Text;
+  composes: groupYLabel;
+}
+
+.group3YLabel {
+  composes: group3Text;
+  composes: groupYLabel;
+}
+
+.groupShape {
+  width: 1rem;
+  height: 1rem;
+  background: grey;
+  border-radius: .0625rem;
+}
+
+.group1Shape {
+  composes: groupShape;
+  background: #3EBCD9;
+}
+
+.group2Shape {
+  composes: groupShape;
+  transform: rotate(45deg);
+  width: .9375rem;
+  height: .9375rem;
+  background: #D97D3F;
+}
+
+.group3Shape {
+  composes: groupShape;
+  border-radius: 50%;
+  width: 1.0625rem;
+  height: 1.0625rem;
+  background: #40B8A3;
+}
+
+.groupPoint {
+  position: absolute;
+  transform: translate(-50%, 50%);
+}
+
+.interactiveGroupPoint {
+  composes: groupPoint;
+  transform: translate(-50%, 50%) scale(2);
+}
+
+.legend {
+  margin: 1rem 0 0 2.125rem;
+}
+
+.legendItem {
+  display: inline-block;
+}
+
+.legendItem ~ .legendItem {
+  margin-left: .75rem;
+}
+
+.legendItem > * {
+  display: inline-block;
+  margin-right: .25rem;
+  font-size: .75rem;
+  vertical-align: middle;
+}
+
+.legendItem > .group2Shape {
+  margin-right: .325rem;
+}
