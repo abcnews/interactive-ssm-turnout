@@ -1,7 +1,59 @@
+const animate = require('nanoanimation');
 const {h, Component} = require('preact');
 const styles = require('./Chart.css');
 
+const ANIMATION_OPTIONS = {
+  duration: 250,
+  easing: 'cubic-bezier(0.42, 0, 0.58, 1)',
+  fill: 'forwards'
+};
+
 class Chart extends Component {
+  getAnimatableEls() {
+    return Array.from(this.base.querySelectorAll(`
+      .${styles.groupPoint},
+      .${styles.label},
+      .${styles.groupGridline}
+    `));
+  }
+
+  componentWillUpdate() {
+    this.getAnimatableEls()
+    .forEach(el => el.dataset.from = JSON.stringify({
+      opacity: el.style.opacity,
+      width: el.style.width,
+      height: el.style.height,
+      left: el.style.left,
+      bottom: el.style.bottom
+    }));
+  }
+
+  componentDidUpdate() {
+    this.getAnimatableEls()
+    .forEach((el, index) => {
+      const from = JSON.parse(el.dataset.from);
+      const to = {
+        opacity: el.style.opacity,
+        width: el.style.width,
+        height: el.style.height,
+        left: el.style.left,
+        bottom: el.style.bottom
+      };
+
+      if (
+        from.opacity !== to.opacity ||
+        from.width !== to.width ||
+        from.height !== to.height ||
+        from.left !== to.left ||
+        from.bottom !== to.bottom
+      ) {
+        animate(el, [from, to], ANIMATION_OPTIONS).play();
+      }
+
+      delete el.dataset.from;
+    });
+  }
+
   render({groups, isInteractive}) {
     relaxLabels(groups);
 
@@ -16,9 +68,9 @@ class Chart extends Component {
     ];
 
     const extentLabels = [
-      <div className={styles.minLabel}>{minXLabel <= 0 || minYLabel <= 0 ? '' : '0%'}</div>,
-      <div className={styles.maxXLabel}>{maxXLabel > 90 ? '' : '100%'}</div>,
-      <div className={styles.maxYLabel}>{maxYLabel > 94 ? '' : '100%'}</div>
+      <div className={styles.minLabel} style={{opacity: minXLabel <= 0 || minYLabel <= 0 ? 0 : 1}}>0%</div>,
+      <div className={styles.maxXLabel} style={{opacity: maxXLabel > 90 ? 0 : 1}}>100%</div>,
+      <div className={styles.maxYLabel} style={{opacity: maxYLabel > 94 ? 0 : 1}}>100%</div>,
     ];
 
     const groupGridlines = [];

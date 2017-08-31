@@ -61,33 +61,43 @@
   width: 100%;
 }
 
+.groupGridline {
+  /* only used to className reference */
+}
+
 .group1XGridline {
   composes: xGridline;
+  composes: groupGridline;
   background: #3EBCD9;
 }
 
 .group2XGridline {
   composes: xGridline;
+  composes: groupGridline;
   background: #D97D3F;
 }
 
 .group3XGridline {
   composes: xGridline;
+  composes: groupGridline;
   background: #40B8A3;
 }
 
 .group1YGridline {
   composes: yGridline;
+  composes: groupGridline;
   background: #3EBCD9;
 }
 
 .group2YGridline {
   composes: yGridline;
+  composes: groupGridline;
   background: #D97D3F;
 }
 
 .group3YGridline {
   composes: yGridline;
+  composes: groupGridline;
   background: #40B8A3
 }
 
