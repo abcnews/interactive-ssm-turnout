@@ -18,7 +18,7 @@ class Graphic extends Component {
     };
 
     setInterval(() => {
-      // this.state.isInteractive = Math.random() > .5;
+      this.state.isInteractive = Math.random() > .5;
       this.state.groups[0].x = Math.floor(Math.random() * 100);
       this.state.groups[0].y = Math.floor(Math.random() * 100);
       this.state.groups[1].x = Math.floor(Math.random() * 100);
