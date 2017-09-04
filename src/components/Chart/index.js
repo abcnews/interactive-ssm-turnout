@@ -3,7 +3,7 @@ const {h, Component} = require('preact');
 const styles = require('./Chart.css');
 
 const ANIMATION_OPTIONS = {
-  duration: 250,
+  duration: 500,
   easing: 'cubic-bezier(0.42, 0, 0.58, 1)',
   fill: 'forwards'
 };
@@ -21,6 +21,7 @@ class Chart extends Component {
     this.getAnimatableEls()
     .forEach(el => el.dataset.from = JSON.stringify({
       opacity: el.style.opacity,
+      transform: window.getComputedStyle(el).transform,
       width: el.style.width,
       height: el.style.height,
       left: el.style.left,
@@ -34,6 +35,7 @@ class Chart extends Component {
       const from = JSON.parse(el.dataset.from);
       const to = {
         opacity: el.style.opacity,
+        transform: window.getComputedStyle(el).transform,
         width: el.style.width,
         height: el.style.height,
         left: el.style.left,
@@ -42,6 +44,7 @@ class Chart extends Component {
 
       if (
         from.opacity !== to.opacity ||
+        from.transform !== to.transform ||
         from.width !== to.width ||
         from.height !== to.height ||
         from.left !== to.left ||
@@ -83,8 +86,8 @@ class Chart extends Component {
         <div className={styles[`group${group.key}YGridline`]} style={{width: `${group.x}%`, bottom: `${group.y}%`}}></div>
       );
       groupLabels.push(
-        <div className={styles[`group${group.key}XLabel`]} style={{left: `${group.xLabel}%`}}>{group.x}%</div>,
-        <div className={styles[`group${group.key}YLabel`]} style={{bottom: `${group.yLabel}%`}}>{group.y}%</div>
+        <div className={styles[`group${group.key}XLabel`]} data-text={`${group.x}%`} style={{left: `${group.xLabel}%`}}>{group.x}%</div>,
+        <div className={styles[`group${group.key}YLabel`]} data-text={`${group.y}%`} style={{bottom: `${group.yLabel}%`}}>{group.y}%</div>
       );
       groupPoints.push(
         <div key={group.key}
@@ -95,12 +98,6 @@ class Chart extends Component {
       );
     });
 
-    const gridChildren = midGridines
-      .concat(groupGridlines)
-      .concat(extentLabels)
-      .concat(groupLabels)
-      .concat(groupPoints);
-
     return (
       <div className={styles.root}>
         <div className={styles.xAxisName}>Percent of voter turnout</div>
@@ -108,8 +105,8 @@ class Chart extends Component {
           {midGridines
           .concat(groupGridlines)
           .concat(extentLabels)
-          .concat(groupLabels)
-          .concat(groupPoints)}
+          .concat(groupPoints)
+          .concat(groupLabels)}
         </div>
         <div className={styles.yAxisName}>Percent of ‘Yes’ votes</div>
         <div className={styles.legend}>{groups.map(group => 
