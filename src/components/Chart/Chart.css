@@ -211,6 +211,7 @@
 .group1Shape {
   composes: groupShape;
   background: #3EBCD9;
+  /*box-shadow: inset 0 0 0 .015625rem #007D99;*/
 }
 
 .group2Shape {
@@ -219,6 +220,7 @@
   width: .9375rem;
   height: .9375rem;
   background: #D97D3F;
+  /*box-shadow: inset 0 0 0 .015625rem #C44B00;*/
 }
 
 .group3Shape {
@@ -227,6 +229,7 @@
   width: 1.0625rem;
   height: 1.0625rem;
   background: #40B8A3;
+  /*box-shadow: inset 0 0 .015625rem #07856E;*/
 }
 
 .groupPoint {
@@ -237,6 +240,7 @@
 .interactiveGroupPoint {
   composes: groupPoint;
   transform: translate(-50%, 50%) scale(2);
+  cursor: pointer;
 }
 
 .legend {

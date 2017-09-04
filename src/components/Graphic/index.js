@@ -17,8 +17,7 @@ class Graphic extends Component {
       ]
     };
 
-    setInterval(() => {
-      this.state.isInteractive = Math.random() > .5;
+    setTimeout(() => {
       this.state.groups[0].x = Math.floor(Math.random() * 100);
       this.state.groups[0].y = Math.floor(Math.random() * 100);
       this.state.groups[1].x = Math.floor(Math.random() * 100);
@@ -27,13 +26,30 @@ class Graphic extends Component {
       this.state.groups[2].y = Math.floor(Math.random() * 100);
       this.setState();
     }, 1000);
+
+    setTimeout(() => {
+      this.setState({
+        isInteractive: true
+      });
+    }, 2000);
+  }
+
+  updateGroup(key, x, y) {
+    this.state.groups
+    .filter(group => group.key === key)
+    .forEach((group, index) => {
+      group.x = x;
+      group.y = y;
+    });
+
+    this.setState();
   }
 
   render({}, {isInteractive, total, groups}) {
     return (
       <div className={styles.root}>
         <Total value={total} />
-        <Chart groups={groups} isInteractive={isInteractive} />
+        <Chart groups={groups} isInteractive={isInteractive} updateGroup={this.updateGroup.bind(this)} />
       </div>
     );
   }
