@@ -9,11 +9,14 @@ class Graphic extends Component {
     super();
 
     this.onMark = this.onMark.bind(this);
+    this.updateGroup = this.updateGroup.bind(this);
+    this.toggleTransitions = this.toggleTransitions.bind(this);
 
     this.state = {
       dataById: {},
       groups: [],
-      isInteractive: false
+      isInteractive: false,
+      shouldTransition: true
     };
 
     csv(dataURL, (err, data) => {
@@ -67,11 +70,21 @@ class Graphic extends Component {
     this.setState();
   }
 
-  render({}, {isInteractive, groups}) {
+  toggleTransitions(shouldTransition) {
+    this.setState({shouldTransition});
+  }
+
+  render({}, {groups, isInteractive, shouldTransition}) {
     return (
       <div className={styles.root}>
-        <Total groups={groups} />
-        <Chart groups={groups} isInteractive={isInteractive} updateGroup={this.updateGroup.bind(this)} />
+        <Total
+          groups={groups}
+          shouldTransition={shouldTransition} />
+        <Chart
+          groups={groups}
+          isInteractive={isInteractive}
+          updateGroup={this.updateGroup}
+          toggleTransitions={this.toggleTransitions} />
       </div>
     );
   }

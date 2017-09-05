@@ -132,6 +132,8 @@ class Chart extends Component {
     document.addEventListener('touchcancel', this.onDragEnd);
 
     event.target.focus();
+
+    this.props.toggleTransitions(false);
   }
 
   onDrag(event) {
@@ -149,6 +151,8 @@ class Chart extends Component {
     document.removeEventListener('mouseup', this.onDragEnd);
     document.removeEventListener('touchend', this.onDragEnd);
     document.removeEventListener('touchcancel', this.onDragEnd);
+
+    this.props.toggleTransitions(true);
   }
 
   render({groups, isInteractive}) {

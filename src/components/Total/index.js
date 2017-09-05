@@ -7,7 +7,7 @@ class Total extends Component {
     this._previousValue = this
   }
 
-  render({groups}) {
+  render({groups, shouldTransition}) {
     const value = groups.length ? (
      (groups[0].p * groups[0].x * groups[0].y) +
      (groups[1].p * groups[1].x * groups[1].y) +
@@ -20,14 +20,13 @@ class Total extends Component {
 
     return (
       <div className={styles.root}>
-        {/*<div className={styles.value}>{Math.floor(value)}%</div>*/}
         <div className={styles.value}>
-          <CountTo from={previousValue} to={value} speed={500} />%
+          <CountTo from={previousValue} to={value} speed={shouldTransition ? 500 : 0} />%
         </div>
         of the total votes are ‘Yes’
         <div className={styles.bar}>
-          <progress className={styles.fill} value={value} max={100} />
-          <progress className={styles.tick} value={value} max={100} />
+          <progress className={`${styles.fill} ${shouldTransition ? styles.shouldTransition : ''}`} value={value} max={100} />
+          <progress className={`${styles.tick} ${shouldTransition ? styles.shouldTransition : ''}`} value={value} max={100} />
         </div>
       </div>
     );

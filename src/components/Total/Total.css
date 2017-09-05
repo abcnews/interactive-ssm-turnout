@@ -51,7 +51,6 @@
 
 .fill::-webkit-progress-value {
   background: #10414D;
-  transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .fill::-moz-progress-bar {
@@ -60,7 +59,6 @@
 
 .fill::-ms-fill {
   background: #10414D;
-  transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .tick {
@@ -83,7 +81,6 @@
 .tick::-webkit-progress-value {
   border-right: .125rem solid #2E3638;
   background: none;
-  transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .tick::-moz-progress-bar {
@@ -94,5 +91,13 @@
 .tick::-ms-fill {
   border-right: .125rem solid #2E3638;
   background: none;
+}
+
+.shouldTransition::-webkit-progress-value {
+  transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
+}
+
+
+.shouldTransition::-ms-fill {
   transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
