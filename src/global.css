@@ -47,6 +47,6 @@
   }
 }
 
-:global .Block > .Block-content:last-child {
-  margin-bottom: 100vh;
+:global .Block.is-piecemeal > .Block-content:last-child {
+  margin-bottom: 125vh;
 }

@@ -97,7 +97,6 @@
   transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
-
 .shouldTransition::-ms-fill {
   transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
