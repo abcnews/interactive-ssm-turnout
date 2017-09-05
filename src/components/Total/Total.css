@@ -4,16 +4,30 @@
 }
 
 .value {
-  color: #10414D;;
+  color: #10414D;
   font-size: 2.5rem;
   font-family: ABCSerif, sans-serif;
   font-weight: bold;
   line-height: 1;
 }
 
+@media (max-height: 30rem) {
+  .value {
+    display: inline-block;
+    width: 2.75rem;
+    font-size: 1rem;
+  }
+}
+
 .bar {
   position: relative;
   height: 2rem;
+}
+
+@media (max-height: 30rem) {
+  .bar {
+    display: none;
+  }
 }
 
 .fill {

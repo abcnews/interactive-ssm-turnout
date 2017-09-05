@@ -18,6 +18,12 @@
   max-width: 6rem;
 }
 
+@media (max-height: 30rem) {
+  .xAxisName {
+    max-width: none;
+  }
+}
+
 .yAxisName {
   composes: axisName;
   text-align: center;
@@ -32,6 +38,12 @@
   padding-top: 60%;
   height: 0;
   font-size: .75rem;
+}
+
+@media (max-height: 30rem) {
+  .grid {
+    padding-top: 30%;
+  }
 }
 
 .gridline {
