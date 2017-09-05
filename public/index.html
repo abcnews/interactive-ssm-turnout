@@ -1,4 +1,78 @@
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<div data-interactive-ssm-turnout-root></div>
-<script src="index.js"></script>
+<!doctype html>
+<html land="en-AU">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      body { margin: 0; }
+    </style>
+    <link rel="stylesheet" href="http://www.abc.net.au/res/sites/news-projects/odyssey/2.3.0/index.css" />
+  </head>
+  <body class="platform-mobile">
+    <header>
+      <nav id="abcHeader" class="global"></nav>
+    </header>
+    <div class="content">
+      <article>
+        <header>
+          <h1>Title</h1>
+          <span class="attribution richtext">By <a href="#" target="_self" title="">Colin Gourlay</a></span>
+          <time class="updated" datetime="2017-08-24T17:29+10:00"><small>Updated</small>Thu 24 Aug 2017, 5:29 PM AEST</time>
+        </header>
+        <div class="story richtext">
+          <a name="scrollytellerIDa"> </a>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <a name="markIDb"> </a>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <a name="markIDc"> </a>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <a name="markIDcINTERACTIVEtrue"> </a>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <a name="endscrollyteller"> </a>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <p>Etiam accumsan, libero sed scelerisque fermentum, ipsum libero tempor sapien, sit amet sodales nisl ex vitae ligula.</p>
+          <div class="embed-fragment">
+            <div data-interactive-ssm-turnout-root data-data="data.csv"></div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <script>
+      (function (w, d, t, a) {
+        w.onload = () => {
+          const ls = d.getElementsByTagName(t)[0];
+          a.forEach(src => {
+            const s = document.createElement(t);
+            s.async = true;
+            s.src = src;
+            ls.parentNode.insertBefore(s, ls);
+          });
+        };
+      }(window, document, 'script', [
+        'http://www.abc.net.au/res/sites/news-projects/odyssey/2.3.0/index.js',
+        'http://www.abc.net.au/res/sites/news-projects/odyssey-scrollyteller/2.0.0/index.js',
+        'index.js'
+      ]));
+    </script>
+  </body>
+</html>

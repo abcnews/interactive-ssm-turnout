@@ -15,8 +15,10 @@
     "@abcnews/aunty": "5.1.x"
   },
   "dependencies": {
+    "d3-request": "^1.0.6",
     "nanoanimation": "^1.0.0",
     "preact": "^8.2.5",
-    "preact-compat": "^3.17.0"
+    "preact-compat": "^3.17.0",
+    "react-count-to": "^0.8.1"
   }
 }

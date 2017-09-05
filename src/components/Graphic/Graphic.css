@@ -1,6 +1,6 @@
 .root {
-  margin: 1rem auto;
-  max-width: 480px;
+  margin: auto;
+  padding: 1rem;
   font-family: ABCSans, sans-serif;
   font-size: .875rem;
 }

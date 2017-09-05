@@ -9,23 +9,26 @@ const ANIMATION_OPTIONS = {
 };
 
 class Chart extends Component {
-  constructor(props) {
+  constructor({groups}) {
     super();
     
     this.state = {
-      dragTargetKey: null,
-      gridRect: null,
-      zOrder: props.groups.map(group => group.key)
+      zOrder: groups.map(group => group.key)
     };
+
+    this.dragTargetKey = null;
+    this.gridRect = null;
 
     this.onDrag = this.onDrag.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.state.dragTargetKey !== nextState.dragTargetKey) {
-      return false;
-    }
+  componentWillReceiveProps({groups}) {
+    this.setState({
+      zOrder: groups.map(({key}) => key).sort((a, b) => {
+        return this.state.zOrder.indexOf(a) - this.state.zOrder.indexOf(b)
+      })
+    });
   }
 
   componentWillUpdate() {
@@ -40,13 +43,17 @@ class Chart extends Component {
     }));
   }
 
-  componentDidUpdate() {
-    if (this.state.dragTargetKey) {
+  componentDidUpdate({isInteractive}) {
+    if (this.dragTargetKey) {
       return;
     }
 
     this.getAnimatableEls()
     .forEach((el, index) => {
+      if (!el.dataset.from) {
+        return;
+      }
+
       const from = JSON.parse(el.dataset.from);
       const to = {
         opacity: el.style.opacity,
@@ -70,40 +77,56 @@ class Chart extends Component {
 
       delete el.dataset.from;
     });
+
+    if (this.props.isInteractive && !isInteractive && !this._dragHint && this.props.groups.length) {
+      this._dragHint = document.createElement('div');
+      this._dragHint.className = styles.dragHint;
+      this._dragHint.addEventListener('animationend', () => this._dragHint.parentElement.removeChild(this._dragHint));
+      Array.from(this.base.querySelectorAll(`.${styles.groupPoint.split(' ')[0]}`)).reverse()[0].appendChild(this._dragHint);
+    }
+  }
+
+  componentWillUnmount() {
+    if (!this.dragTargetKey) {
+      return;
+    }
+
+    document.removeEventListener('mousemove', this.onDrag);
+    document.removeEventListener('touchmove', this.onDrag);
+    document.removeEventListener('mouseup', this.onDragEnd);
+    document.removeEventListener('touchend', this.onDragEnd);
+    document.removeEventListener('touchcancel', this.onDragEnd);
   }
 
   translatePointerToValue(pointer) {
     return {
-      x: Math.max(Math.min(pointer.clientX - this.state.gridRect.left, this.state.gridRect.width), 0) / this.state.gridRect.width * 100,
-      y: 100 - Math.max(Math.min(pointer.clientY - this.state.gridRect.top, this.state.gridRect.height), 0) / this.state.gridRect.height * 100
+      x: Math.max(Math.min(pointer.clientX - this.gridRect.left, this.gridRect.width), 0) / this.gridRect.width * 100,
+      y: 100 - Math.max(Math.min(pointer.clientY - this.gridRect.top, this.gridRect.height), 0) / this.gridRect.height * 100
     };
   }
 
   getAnimatableEls() {
-    return Array.from(this.base.querySelectorAll(`
-      .${styles.groupPoint},
-      .${styles.label},
-      .${styles.groupGridline}
-    `));
+    return Array.from(this.base.querySelectorAll(`.${styles.isAnimatable}`));
   }
 
   onDragStart(key, event) {
-    if (this.state.dragTargetKey) {
+    if (this.dragTargetKey) {
       return;
     }
+
+    event.preventDefault();
 
     const zOrder = [].concat(this.state.zOrder);
 
     zOrder.splice(zOrder.length - 1, 0, zOrder.splice(zOrder.indexOf(key), 1)[0]);
 
-    this.setState({
-      dragTargetKey: key,
-      gridRect: this.base.querySelector(`.${styles.grid}`).getBoundingClientRect(),
-      zOrder
-    });
+    this.dragTargetKey = key;
+    this.gridRect = this.base.querySelector(`.${styles.grid}`).getBoundingClientRect();
+
+    this.setState({zOrder});
 
     document.addEventListener('mousemove', this.onDrag);
-    document.addEventListener('touchmove', this.onDrag, {passive: false});
+    document.addEventListener('touchmove', this.onDrag);
     document.addEventListener('mouseup', this.onDragEnd);
     document.addEventListener('touchend', this.onDragEnd);
     document.addEventListener('touchcancel', this.onDragEnd);
@@ -112,18 +135,14 @@ class Chart extends Component {
   }
 
   onDrag(event) {
-    event.preventDefault();
-
     const {x, y} = this.translatePointerToValue(event.touches ? event.touches[0] : event);
 
-    this.props.updateGroup(this.state.dragTargetKey, x, y);
+    this.props.updateGroup(this.dragTargetKey, x, y);
   }
 
   onDragEnd(event) {
-    this.setState({
-      dragTargetKey: null,
-      gridRect: null
-    });
+    this.dragTargetKey = null;
+    this.gridRect = null;
 
     document.removeEventListener('mousemove', this.onDrag);
     document.removeEventListener('touchmove', this.onDrag);

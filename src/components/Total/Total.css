@@ -28,7 +28,7 @@
   height: 1.5625rem;
   background: #ECEFEF;
   box-shadow: inset 0 0 0 .125rem #D9DFE0;
-  color: #10414D;;
+  color: #10414D;
 }
 
 .fill::-webkit-progress-bar {
@@ -36,15 +36,17 @@
 }
 
 .fill::-webkit-progress-value {
-  background: #10414D;;
+  background: #10414D;
+  transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .fill::-moz-progress-bar {
-  background: #10414D;;
+  background: #10414D;
 }
 
 .fill::-ms-fill {
-  background: #10414D;;
+  background: #10414D;
+  transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .tick {
@@ -67,6 +69,7 @@
 .tick::-webkit-progress-value {
   border-right: .125rem solid #2E3638;
   background: none;
+  transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .tick::-moz-progress-bar {
@@ -77,4 +80,5 @@
 .tick::-ms-fill {
   border-right: .125rem solid #2E3638;
   background: none;
+  transition: width .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
