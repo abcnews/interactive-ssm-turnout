@@ -15,7 +15,7 @@ function Total({label, groups, reducer, shouldTransition}) {
   return (
     <div className={styles.root}>
       <div className={styles.value}>
-        <CountTo from={previousPct} to={pct} speed={shouldTransition ? 500 : 0} />%
+        <CountTo from={previousPct} to={pct} digits={1} speed={shouldTransition ? 500 : 0} />%
       </div>
       {label}
       <Bar value={pct} max={100} shouldTransition={shouldTransition} />
