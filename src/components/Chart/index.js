@@ -1,6 +1,8 @@
 const {h, Component} = require('preact');
 const styles = require('./Chart.css');
 
+const INACTIVE_OPACITY = .5;
+
 class Chart extends Component {
   constructor({groups}) {
     super();
@@ -145,18 +147,18 @@ class Chart extends Component {
             key={`group${group.key}XLabel`}
             className={`${styles[`group${group.key}XLabel`]} ${shouldTransition ? styles.shouldTransition : ''}`}
             data-text={`${Math.round(group.x)}%`}
-            style={{left: `${group.xLabel}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? .3 : ''}}>{Math.round(group.x)}%</div>,
+            style={{left: `${group.xLabel}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''}}>{Math.round(group.x)}%</div>,
           <div
             key={`group${group.key}YLabel`}
             className={`${styles[`group${group.key}YLabel`]} ${shouldTransition ? styles.shouldTransition : ''}`}
             data-text={`${Math.round(group.y)}%`}
-            style={{bottom: `${group.yLabel}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? .3 : ''}}>{Math.round(group.y)}%</div>
+            style={{bottom: `${group.yLabel}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''}}>{Math.round(group.y)}%</div>
         );
         groupPoints.push(
           <div
             key={`group${group.key}Point`}
             className={`${styles[isInteractive ? 'interactiveGroupPoint' : 'groupPoint']} ${shouldTransition ? styles.shouldTransition : ''}`}
-            style={{left: `${group.x}%`, bottom: `${group.y}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? .3 : ''}}
+            style={{left: `${group.x}%`, bottom: `${group.y}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''}}
             onMouseDown={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}
             onTouchStart={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}>
             <div className={styles[`group${group.key}Shape`]}></div>
@@ -178,7 +180,7 @@ class Chart extends Component {
         <div className={styles.yAxisName}>Percent of ‘Yes’ votes</div>
         <div className={styles.legend}>
           {groups.map(group => (
-          <div className={styles.legendItem} style={{opacity: dragTargetKey && group.key !== dragTargetKey ? .3 : ''}}>
+          <div className={styles.legendItem} style={{opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''}}>
             <div className={styles[`group${group.key}Shape`]}></div>
             <div className={styles[`group${group.key}Text`]}>{group.name}</div>
           </div>
