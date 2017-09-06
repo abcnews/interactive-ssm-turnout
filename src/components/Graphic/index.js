@@ -85,8 +85,9 @@ class Graphic extends Component {
         <Chart
           groups={groups}
           isInteractive={isInteractive}
-          updateGroup={this.updateGroup}
-          toggleTransitions={this.toggleTransitions} />
+          shouldTransition={shouldTransition}
+          toggleTransitions={this.toggleTransitions}
+          updateGroup={this.updateGroup} />
       </div>
     );
   }

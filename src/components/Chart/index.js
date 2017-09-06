@@ -1,12 +1,5 @@
-const animate = require('nanoanimation');
 const {h, Component} = require('preact');
 const styles = require('./Chart.css');
-
-const ANIMATION_OPTIONS = {
-  duration: 500,
-  easing: 'cubic-bezier(0.42, 0, 0.58, 1)',
-  fill: 'backwards'
-};
 
 class Chart extends Component {
   constructor({groups}) {
@@ -31,53 +24,7 @@ class Chart extends Component {
     });
   }
 
-  componentWillUpdate() {
-    this.getAnimatableEls()
-    .forEach(el => el.dataset.from = JSON.stringify({
-      opacity: el.style.opacity,
-      transform: window.getComputedStyle(el).transform,
-      width: el.style.width,
-      height: el.style.height,
-      left: el.style.left,
-      bottom: el.style.bottom
-    }));
-  }
-
   componentDidUpdate({isInteractive}) {
-    if (this.dragTargetKey) {
-      return;
-    }
-
-    this.getAnimatableEls()
-    .forEach((el, index) => {
-      if (!el.dataset.from) {
-        return;
-      }
-
-      const from = JSON.parse(el.dataset.from);
-      const to = {
-        opacity: el.style.opacity,
-        transform: window.getComputedStyle(el).transform,
-        width: el.style.width,
-        height: el.style.height,
-        left: el.style.left,
-        bottom: el.style.bottom
-      };
-
-      if (
-        from.opacity !== to.opacity ||
-        from.transform !== to.transform ||
-        from.width !== to.width ||
-        from.height !== to.height ||
-        from.left !== to.left ||
-        from.bottom !== to.bottom
-      ) {
-        animate(el, [from, to], ANIMATION_OPTIONS).play();
-      }
-
-      delete el.dataset.from;
-    });
-
     if (this.props.isInteractive && !isInteractive && !this._dragHint && this.props.groups.length) {
       this._dragHint = document.createElement('div');
       this._dragHint.className = styles.dragHint;
@@ -103,10 +50,6 @@ class Chart extends Component {
       x: Math.max(Math.min(pointer.clientX - this.gridRect.left, this.gridRect.width), 0) / this.gridRect.width * 100,
       y: 100 - Math.max(Math.min(pointer.clientY - this.gridRect.top, this.gridRect.height), 0) / this.gridRect.height * 100
     };
-  }
-
-  getAnimatableEls() {
-    return Array.from(this.base.querySelectorAll(`.${styles.isAnimatable}`));
   }
 
   onDragStart(key, event) {
@@ -155,7 +98,7 @@ class Chart extends Component {
     this.props.toggleTransitions(true);
   }
 
-  render({groups, isInteractive}) {
+  render({groups, isInteractive, shouldTransition}) {
     relaxLabels(groups);
 
     const minXLabel = Math.min.apply(Math, groups.map(group => group.xLabel));
@@ -183,29 +126,34 @@ class Chart extends Component {
       .filter(group => group.key === key)
       .forEach(group => {
         groupGridlines.push(
-          <div key={`group${group.key}XGridline`}
-               className={styles[`group${group.key}XGridline`]}
-               style={{left: `${group.x}%`, height: `${group.y}%`}}></div>,
-          <div key={`group${group.key}YGridline`}
-               className={styles[`group${group.key}YGridline`]}
-               style={{width: `${group.x}%`, bottom: `${group.y}%`}}></div>
+          <div
+            key={`group${group.key}XGridline`}
+            className={`${styles[`group${group.key}XGridline`]} ${shouldTransition ? styles.shouldTransition : ''}`}
+            style={{left: `${group.x}%`, height: `${group.y}%`}}></div>,
+          <div
+            key={`group${group.key}YGridline`}
+            className={`${styles[`group${group.key}YGridline`]} ${shouldTransition ? styles.shouldTransition : ''}`}
+            style={{width: `${group.x}%`, bottom: `${group.y}%`}}></div>
         );
         groupLabels.push(
-          <div key={`group${group.key}XLabel`}
-               className={styles[`group${group.key}XLabel`]}
-               data-text={`${Math.round(group.x)}%`}
-               style={{left: `${group.xLabel}%`}}>{Math.round(group.x)}%</div>,
-          <div key={`group${group.key}YLabel`}
-               className={styles[`group${group.key}YLabel`]}
-               data-text={`${Math.round(group.y)}%`}
-               style={{bottom: `${group.yLabel}%`}}>{Math.round(group.y)}%</div>
+          <div
+            key={`group${group.key}XLabel`}
+            className={`${styles[`group${group.key}XLabel`]} ${shouldTransition ? styles.shouldTransition : ''}`}
+            data-text={`${Math.round(group.x)}%`}
+            style={{left: `${group.xLabel}%`}}>{Math.round(group.x)}%</div>,
+          <div
+            key={`group${group.key}YLabel`}
+            className={`${styles[`group${group.key}YLabel`]} ${shouldTransition ? styles.shouldTransition : ''}`}
+            data-text={`${Math.round(group.y)}%`}
+            style={{bottom: `${group.yLabel}%`}}>{Math.round(group.y)}%</div>
         );
         groupPoints.push(
-          <div key={`group${group.key}Point`}
-               className={styles[isInteractive ? 'interactiveGroupPoint' : 'groupPoint']}
-               style={{left: `${group.x}%`, bottom: `${group.y}%`}}
-               onMouseDown={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}
-               onTouchStart={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}>
+          <div
+            key={`group${group.key}Point`}
+            className={`${styles[isInteractive ? 'interactiveGroupPoint' : 'groupPoint']} ${shouldTransition ? styles.shouldTransition : ''}`}
+            style={{left: `${group.x}%`, bottom: `${group.y}%`}}
+            onMouseDown={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}
+            onTouchStart={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}>
             <div className={styles[`group${group.key}Shape`]}></div>
           </div>
         );

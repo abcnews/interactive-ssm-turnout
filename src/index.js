@@ -22,18 +22,6 @@ function init() {
 
 init();
 
-// Web Animations API polyfill (can be loaded async)
-
-if (typeof root.animate !== 'function') {
-  const script = document.createElement('script');
-  const lastScript = document.getElementsByTagName('script')[0];
-  
-  script.async = true;
-  script.src = `${__webpack_public_path__}web-animations.min.js`;
-  lastScript.parentNode.insertBefore(script, lastScript);
-}
-
-
 if (module.hot) {
   module.hot.accept('./components/Graphic', () => {
     try {

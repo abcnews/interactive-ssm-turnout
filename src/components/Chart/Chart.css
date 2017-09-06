@@ -5,10 +5,6 @@
   user-select: none;
 }
 
-.isAnimatable {
-  /* used as behavioural selector */
-}
-
 .axisName {
   font-weight: bold;
 }
@@ -80,42 +76,35 @@
 
 .group1XGridline {
   composes: xGridline;
-  composes: isAnimatable;
   background: #3EBCD9;
 }
 
 .group2XGridline {
   composes: xGridline;
-  composes: isAnimatable;
   background: #D97D3F;
 }
 
 .group3XGridline {
   composes: xGridline;
-  composes: isAnimatable;
   background: #40B8A3;
 }
 
 .group1YGridline {
   composes: yGridline;
-  composes: isAnimatable;
   background: #3EBCD9;
 }
 
 .group2YGridline {
   composes: yGridline;
-  composes: isAnimatable;
   background: #D97D3F;
 }
 
 .group3YGridline {
   composes: yGridline;
-  composes: isAnimatable;
   background: #40B8A3
 }
 
 .label {
-  composes: isAnimatable;
   position: absolute;
 }
 
@@ -144,18 +133,25 @@
   transform: translate(-.375rem, 50%);
 } 
 
+.extentLabel {
+  transition: opacity .125s cubic-bezier(0.42, 0, 0.58, 1);
+}
+
 .minLabel {
   composes: yLabel;
+  composes: extentLabel;
   top: 100%;
 }
 
 .maxXLabel {
   composes: xLabel;
+  composes: extentLabel;
   left: 100%;
 }
 
 .maxYLabel {
   composes: yLabel;
+  composes: extentLabel;
   bottom: 100%;
 }
 
@@ -245,7 +241,6 @@
 }
 
 .groupPoint {
-  composes: isAnimatable;
   position: absolute;
   transform: translate(-50%, 50%);
 }
@@ -309,4 +304,14 @@
 	background-image: url(./hint.svg);
 	pointer-events: none;
 	animation: dragHint 2.5s .5s;
+}
+
+.shouldTransition {
+  transition:
+    opacity .5s cubic-bezier(0.42, 0, 0.58, 1),
+    transform .5s cubic-bezier(0.42, 0, 0.58, 1),
+    width .5s cubic-bezier(0.42, 0, 0.58, 1),
+    height .5s cubic-bezier(0.42, 0, 0.58, 1),
+    left .5s cubic-bezier(0.42, 0, 0.58, 1),
+    bottom .5s cubic-bezier(0.42, 0, 0.58, 1);
 }
