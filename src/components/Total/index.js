@@ -8,11 +8,9 @@ class Total extends Component {
   }
 
   render({groups, shouldTransition}) {
-    const value = groups.length ? (
-     (groups[0].p * groups[0].x * groups[0].y) +
-     (groups[1].p * groups[1].x * groups[1].y) +
-     (groups[2].p * groups[2].x * groups[2].y)
-    ) / (groups[0].p + groups[1].p + groups[2].p) / 100 : 0;
+    const value = groups.length === 0 ? 0 :
+      groups.reduce((memo, group) => memo + (group.p * group.x * group.y), 0) /
+      groups.reduce((memo, group) => memo + group.p, 0) / 100; 
     
     const previousValue = this._cachedValue || 0;
 
