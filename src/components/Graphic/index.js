@@ -104,7 +104,7 @@ function rowToGroups(row) {
 function groupsToPct(groups) {
   return groups.length === 0 ? 0 :
     groups.reduce((memo, group) => memo + (group.p * group.x * group.y), 0) /
-    groups.reduce((memo, group) => memo + group.p, 0) / 100;
+    groups.reduce((memo, group) => memo + (group.p * group.y / 100), 0) / 100;
 }
 
 module.exports = Graphic;
