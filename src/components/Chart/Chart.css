@@ -48,6 +48,7 @@
   width: .125rem;
   height: .125rem;
   background: #D9DFE0;
+  transition: opacity .125s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .xGridline {
@@ -107,19 +108,7 @@
 .label {
   position: absolute;
   pointer-events: none;
-}
-
-@supports (-webkit-text-stroke-width: 0) or (-moz-text-stroke-width: 0) {
-  .label::before {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-    z-index: -1;
-    -webkit-text-stroke-color: #fff;
-    -moz-text-stroke-color: #fff;
-    -webkit-text-stroke-width: .125rem;
-    -moz-text-stroke-width: .125rem;
-  }
+  transition: opacity .125s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .xLabel {
@@ -168,6 +157,19 @@
 .groupYLabel {
   composes: groupLabel;
   composes: yLabel;
+}
+
+@supports (-webkit-text-stroke-width: 0) or (-moz-text-stroke-width: 0) {
+  .label::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    -webkit-text-stroke-color: #fff;
+    -moz-text-stroke-color: #fff;
+    -webkit-text-stroke-width: .125rem;
+    -moz-text-stroke-width: .125rem;
+  }
 }
 
 .group1Text {
@@ -244,6 +246,7 @@
 .groupPoint {
   position: absolute;
   transform: translate(-50%, 50%);
+  transition: opacity .125s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .interactiveGroupPoint {
@@ -258,6 +261,7 @@
 
 .legendItem {
   display: inline-block;
+  transition: opacity .125s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .legendItem ~ .legendItem {
@@ -309,7 +313,7 @@
 
 .shouldTransition {
   transition:
-    opacity .5s cubic-bezier(0.42, 0, 0.58, 1),
+    opacity .125s cubic-bezier(0.42, 0, 0.58, 1),
     transform .5s cubic-bezier(0.42, 0, 0.58, 1),
     width .5s cubic-bezier(0.42, 0, 0.58, 1),
     height .5s cubic-bezier(0.42, 0, 0.58, 1),

@@ -6,10 +6,10 @@ class Chart extends Component {
     super();
     
     this.state = {
+      dragTargetKey: null,
       zOrder: groups.map(group => group.key)
     };
 
-    this.dragTargetKey = null;
     this.gridRect = null;
 
     this.onDrag = this.onDrag.bind(this);
@@ -34,7 +34,7 @@ class Chart extends Component {
   }
 
   componentWillUnmount() {
-    if (!this.dragTargetKey) {
+    if (!this.state.dragTargetKey) {
       return;
     }
 
@@ -53,20 +53,16 @@ class Chart extends Component {
   }
 
   onDragStart(key, event) {
-    if (this.dragTargetKey) {
+    if (this.state.dragTargetKey) {
       return;
     }
 
     event.preventDefault();
+    event.target.focus();
 
     const zOrder = [].concat(this.state.zOrder);
 
     zOrder.splice(zOrder.length - 1, 0, zOrder.splice(zOrder.indexOf(key), 1)[0]);
-
-    this.dragTargetKey = key;
-    this.gridRect = this.base.querySelector(`.${styles.grid}`).getBoundingClientRect();
-
-    this.setState({zOrder});
 
     document.addEventListener('mousemove', this.onDrag);
     document.addEventListener('touchmove', this.onDrag);
@@ -74,7 +70,12 @@ class Chart extends Component {
     document.addEventListener('touchend', this.onDragEnd);
     document.addEventListener('touchcancel', this.onDragEnd);
 
-    event.target.focus();
+    this.gridRect = this.base.querySelector(`.${styles.grid}`).getBoundingClientRect();
+    
+    this.setState({
+      dragTargetKey: key,
+      zOrder
+    });
 
     this.props.toggleTransitions(false);
   }
@@ -82,23 +83,26 @@ class Chart extends Component {
   onDrag(event) {
     const {x, y} = this.translatePointerToValue(event.touches ? event.touches[0] : event);
 
-    this.props.updateGroup(this.dragTargetKey, x, y);
+    this.props.updateGroup(this.state.dragTargetKey, x, y);
   }
 
   onDragEnd(event) {
-    this.dragTargetKey = null;
-    this.gridRect = null;
-
     document.removeEventListener('mousemove', this.onDrag);
     document.removeEventListener('touchmove', this.onDrag);
     document.removeEventListener('mouseup', this.onDragEnd);
     document.removeEventListener('touchend', this.onDragEnd);
     document.removeEventListener('touchcancel', this.onDragEnd);
 
+    this.gridRect = null;
+
+    this.setState({
+      dragTargetKey: null
+    });
+
     this.props.toggleTransitions(true);
   }
 
-  render({groups, isInteractive, shouldTransition}) {
+  render({groups, isInteractive, shouldTransition}, {dragTargetKey}) {
     relaxLabels(groups);
 
     const minXLabel = Math.min.apply(Math, groups.map(group => group.xLabel));
@@ -120,6 +124,7 @@ class Chart extends Component {
     const groupGridlines = [];
     const groupLabels = [];
     const groupPoints = [];
+    const groupLegendItems = [];
 
     this.state.zOrder.forEach(key => {
       groups
@@ -129,29 +134,29 @@ class Chart extends Component {
           <div
             key={`group${group.key}XGridline`}
             className={`${styles[`group${group.key}XGridline`]} ${shouldTransition ? styles.shouldTransition : ''}`}
-            style={{left: `${group.x}%`, height: `${group.y}%`}}></div>,
+            style={{left: `${group.x}%`, height: `${group.y}%`, opacity: dragTargetKey && group.key !== dragTargetKey ?  0 : ''}}></div>,
           <div
             key={`group${group.key}YGridline`}
             className={`${styles[`group${group.key}YGridline`]} ${shouldTransition ? styles.shouldTransition : ''}`}
-            style={{width: `${group.x}%`, bottom: `${group.y}%`}}></div>
+            style={{width: `${group.x}%`, bottom: `${group.y}%`, opacity: dragTargetKey && group.key !== dragTargetKey ?  0 : ''}}></div>
         );
         groupLabels.push(
           <div
             key={`group${group.key}XLabel`}
             className={`${styles[`group${group.key}XLabel`]} ${shouldTransition ? styles.shouldTransition : ''}`}
             data-text={`${Math.round(group.x)}%`}
-            style={{left: `${group.xLabel}%`}}>{Math.round(group.x)}%</div>,
+            style={{left: `${group.xLabel}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? .3 : ''}}>{Math.round(group.x)}%</div>,
           <div
             key={`group${group.key}YLabel`}
             className={`${styles[`group${group.key}YLabel`]} ${shouldTransition ? styles.shouldTransition : ''}`}
             data-text={`${Math.round(group.y)}%`}
-            style={{bottom: `${group.yLabel}%`}}>{Math.round(group.y)}%</div>
+            style={{bottom: `${group.yLabel}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? .3 : ''}}>{Math.round(group.y)}%</div>
         );
         groupPoints.push(
           <div
             key={`group${group.key}Point`}
             className={`${styles[isInteractive ? 'interactiveGroupPoint' : 'groupPoint']} ${shouldTransition ? styles.shouldTransition : ''}`}
-            style={{left: `${group.x}%`, bottom: `${group.y}%`}}
+            style={{left: `${group.x}%`, bottom: `${group.y}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? .3 : ''}}
             onMouseDown={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}
             onTouchStart={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}>
             <div className={styles[`group${group.key}Shape`]}></div>
@@ -171,12 +176,14 @@ class Chart extends Component {
           .concat(groupLabels)}
         </div>
         <div className={styles.yAxisName}>Percent of ‘Yes’ votes</div>
-        <div className={styles.legend}>{groups.map(group => 
-          <div className={styles.legendItem}>
+        <div className={styles.legend}>
+          {groups.map(group => (
+          <div className={styles.legendItem} style={{opacity: dragTargetKey && group.key !== dragTargetKey ? .3 : ''}}>
             <div className={styles[`group${group.key}Shape`]}></div>
             <div className={styles[`group${group.key}Text`]}>{group.name}</div>
           </div>
-        )}</div>
+          ))}
+        </div>
       </div>
     );
   }
