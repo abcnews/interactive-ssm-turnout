@@ -106,6 +106,7 @@
 
 .label {
   position: absolute;
+  pointer-events: none;
 }
 
 @supports (-webkit-text-stroke-width: 0) or (-moz-text-stroke-width: 0) {
