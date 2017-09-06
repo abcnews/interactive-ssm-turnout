@@ -78,7 +78,9 @@ class Graphic extends Component {
     return (
       <div className={styles.root}>
         <Total
+          label={`of the total votes are ‘Yes’`}
           groups={groups}
+          reducer={groupsToPct}
           shouldTransition={shouldTransition} />
         <Chart
           groups={groups}
@@ -96,6 +98,12 @@ function rowToGroups(row) {
     {key: 2, name: 'Age 35-54', p: +row.p2, x: +row.x2, y: +row.y2},
     {key: 3, name: 'Age 55+', p: +row.p3, x: +row.x3, y: +row.y3}
   ];
+}
+
+function groupsToPct(groups) {
+  return groups.length === 0 ? 0 :
+    groups.reduce((memo, group) => memo + (group.p * group.x * group.y), 0) /
+    groups.reduce((memo, group) => memo + group.p, 0) / 100;
 }
 
 module.exports = Graphic;
