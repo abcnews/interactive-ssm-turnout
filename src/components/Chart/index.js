@@ -8,7 +8,6 @@ class Chart extends Component {
     super();
     
     this.state = {
-      dragTargetKey: null,
       zOrder: groups.map(group => group.key)
     };
 
@@ -26,14 +25,14 @@ class Chart extends Component {
     });
   }
 
-  componentDidUpdate({isInteractive}) {
-    if (this.props.isInteractive && !isInteractive && !this._dragHint && this.props.groups.length) {
-      this._dragHint = document.createElement('div');
-      this._dragHint.className = styles.dragHint;
-      this._dragHint.addEventListener('animationend', () => this._dragHint.parentElement.removeChild(this._dragHint));
-      Array.from(this.base.querySelectorAll(`.${styles.groupPoint.split(' ')[0]}`)).reverse()[0].appendChild(this._dragHint);
-    }
-  }
+  // componentDidUpdate({isInteractive}) {
+  //   if (this.props.isInteractive && !isInteractive && !this._dragHint && this.props.groups.length) {
+  //     this._dragHint = document.createElement('div');
+  //     this._dragHint.className = styles.dragHint;
+  //     this._dragHint.addEventListener('animationend', () => this._dragHint.parentElement.removeChild(this._dragHint));
+  //     Array.from(this.base.querySelectorAll(`.${styles.groupPoint.split(' ')[0]}`)).reverse()[0].appendChild(this._dragHint);
+  //   }
+  // }
 
   componentWillUnmount() {
     if (!this.state.dragTargetKey) {
@@ -126,7 +125,7 @@ class Chart extends Component {
     const groupGridlines = [];
     const groupLabels = [];
     const groupPoints = [];
-    const groupLegendItems = [];
+    const dragHints = [];
 
     this.state.zOrder.forEach(key => {
       groups
@@ -136,34 +135,68 @@ class Chart extends Component {
           <div
             key={`group${group.key}XGridline`}
             className={`${styles[`group${group.key}XGridline`]} ${shouldTransition ? styles.shouldTransition : ''}`}
-            style={{left: `${group.x}%`, height: `${group.y}%`, opacity: dragTargetKey && group.key !== dragTargetKey ?  0 : ''}}></div>,
+            style={{
+              left: `${group.x}%`,
+              height: `${group.y}%`,
+              opacity: dragTargetKey && group.key !== dragTargetKey ?  0 : ''
+            }}
+          ></div>,
           <div
             key={`group${group.key}YGridline`}
             className={`${styles[`group${group.key}YGridline`]} ${shouldTransition ? styles.shouldTransition : ''}`}
-            style={{width: `${group.x}%`, bottom: `${group.y}%`, opacity: dragTargetKey && group.key !== dragTargetKey ?  0 : ''}}></div>
+            style={{
+              width: `${group.x}%`,
+              bottom: `${group.y}%`,
+              opacity: dragTargetKey && group.key !== dragTargetKey ?  0 : ''
+            }}
+          ></div>
         );
         groupLabels.push(
           <div
             key={`group${group.key}XLabel`}
             className={`${styles[`group${group.key}XLabel`]} ${shouldTransition ? styles.shouldTransition : ''}`}
             data-text={`${Math.round(group.x)}%`}
-            style={{left: `${group.xLabel}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''}}>{Math.round(group.x)}%</div>,
+            style={{
+              left: `${group.xLabel}%`,
+              opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''
+            }}
+          >{Math.round(group.x)}%</div>,
           <div
             key={`group${group.key}YLabel`}
             className={`${styles[`group${group.key}YLabel`]} ${shouldTransition ? styles.shouldTransition : ''}`}
             data-text={`${Math.round(group.y)}%`}
-            style={{bottom: `${group.yLabel}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''}}>{Math.round(group.y)}%</div>
+            style={{
+              bottom: `${group.yLabel}%`,
+              opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''
+            }}
+          >{Math.round(group.y)}%</div>
         );
         groupPoints.push(
           <div
             key={`group${group.key}Point`}
             className={`${styles[isInteractive ? 'interactiveGroupPoint' : 'groupPoint']} ${shouldTransition ? styles.shouldTransition : ''}`}
-            style={{left: `${group.x}%`, bottom: `${group.y}%`, opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''}}
-            onMouseDown={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}
-            onTouchStart={this.props.isInteractive ? this.onDragStart.bind(this, group.key) : null}>
+            style={{
+              left: `${group.x}%`,
+              bottom: `${group.y}%`,
+              opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''
+            }}
+            onMouseDown={isInteractive ? this.onDragStart.bind(this, group.key) : null}
+            onTouchStart={isInteractive ? this.onDragStart.bind(this, group.key) : null}
+          >
             <div className={styles[`group${group.key}Shape`]}></div>
           </div>
         );
+        if (typeof this.state.dragTargetKey === 'undefined') {
+          dragHints.push(
+            <div
+              className={`${styles.dragHint}  ${shouldTransition ? styles.shouldTransition : ''}`}
+              style={{
+                opacity: isInteractive ? 1 : '',
+                left: `${group.x}%`,
+                bottom: `${group.y}%`}}
+            ></div>
+          );
+        }
       });
     });
 
@@ -174,6 +207,7 @@ class Chart extends Component {
           {midGridines
           .concat(groupGridlines)
           .concat(extentLabels)
+          .concat(dragHints)
           .concat(groupPoints)
           .concat(groupLabels)}
         </div>

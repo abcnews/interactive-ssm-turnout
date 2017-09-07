@@ -281,34 +281,23 @@
 
 @keyframes dragHint {
   0%, 100% {
-    opacity: 0;
+    transform: translate(-50%, 50%) scale(.9);
   }
-  20%, 80% {
-    opacity: 1;
-  }
-  10%, 50%, 90% {
-    transform: none;
-  }
-  30% {
-    transform: translate3d(-50%, 12.5%, 0) rotate3d(0, 0, 1, -7.5deg);
-  }
-  70% {
-    transform: translate3d(50%, -12.5%, 0) rotate3d(0, 0, 1, 7.5deg);
+  50% {
+    transform: translate(-50%, 50%) scale(1.1);
   }
 }
 
 .dragHint {
-	opacity: 0;
+  opacity: 0;
 	position: absolute;
-	top: 33%;
-	left: 25%;
-	width: 1.9375rem;
-	height: 3.0625rem;
+	width: 3.75rem;
+	height: 3.75rem;
 	background-repeat: no-repeat;
 	background-size: 100%;
 	background-image: url(./hint.svg);
 	pointer-events: none;
-	animation: dragHint 2.5s .5s;
+	animation: dragHint 1.25s infinite;
 }
 
 .shouldTransition {
