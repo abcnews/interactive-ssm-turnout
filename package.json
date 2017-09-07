@@ -7,17 +7,26 @@
   "contributors": [
     "Colin Gourlay <Gourlay.Colin@abc.net.au>"
   ],
-  "aunty": "preact-app",
+  "aunty": {
+    "type": "preact-app",
+    "babel": {
+      "plugins": [
+        "babel-plugin-styled-components"
+      ]
+    }
+  },
   "scripts": {
     "start": "aunty serve"
   },
   "devDependencies": {
-    "@abcnews/aunty": "5.1.x"
+    "@abcnews/aunty": "5.1.x",
+    "babel-plugin-styled-components": "^1.2.0"
   },
   "dependencies": {
     "d3-request": "^1.0.6",
     "preact": "^8.2.5",
     "preact-compat": "^3.17.0",
-    "react-count-to": "^0.8.1"
+    "react-count-to": "^0.8.1",
+    "styled-components": "^2.1.2"
   }
 }

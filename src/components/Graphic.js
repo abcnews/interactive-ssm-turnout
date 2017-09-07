@@ -1,8 +1,15 @@
 const {csv} = require('d3-request');
 const {h, Component} = require('preact');
-const Total = require('../Total');
-const Chart = require('../Chart');
-const styles = require('./Graphic.css');
+const styled = require('styled-components').default;
+const Total = require('./Total');
+const Chart = require('./Chart');
+
+const Container = styled.div`
+  margin: auto;
+  padding: 1rem;
+  font-family: ${props => props.theme.fontSans};
+  font-size: .875rem;
+`;
 
 class Graphic extends Component {
   constructor({dataURL, scrollyteller}) {
@@ -76,9 +83,9 @@ class Graphic extends Component {
 
   render({}, {groups, isInteractive, shouldTransition}) {
     return (
-      <div className={styles.root}>
+      <Container>
         <Total
-          label={`of the total votes are ‘Yes’`}
+          label="of the total votes are ‘Yes’"
           groups={groups}
           reducer={groupsToPct}
           shouldTransition={shouldTransition} />
@@ -88,7 +95,7 @@ class Graphic extends Component {
           shouldTransition={shouldTransition}
           toggleTransitions={this.toggleTransitions}
           updateGroup={this.updateGroup} />
-      </div>
+      </Container>
     );
   }
 }
