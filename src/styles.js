@@ -9,11 +9,11 @@ const theme = module.exports.theme = {
   greyLight: '#ECEFEF',
   primary: '#10414D',
   primaryDark: '#2E3638',
-  group1: '#007D99',
+  group1FG: '#007D99',
   group1BG: '#3EBCD9',
-  group2: '#C44B00',
+  group2FG: '#C44B00',
   group2BG: '#D97D3F',
-  group3: '#07856E',
+  group3FG: '#07856E',
   group3BG: '#40B8A3',
   bezier: 'cubic-bezier(0.42, 0, 0.58, 1)'
 };

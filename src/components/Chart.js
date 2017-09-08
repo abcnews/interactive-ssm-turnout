@@ -288,7 +288,7 @@ const Label = styled.div`
   right: ${props => props.axis !== 'x' ? '100%' : 'auto'};
   bottom: ${props => props.axis === 'y' && props.extent === 'max' ? '100%' : 'auto'};
   left: ${props => props.axis === 'x' && props.extent === 'max' ? '100%' : 'auto'};
-  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}`] : 'inherit'};
+  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}FG`] : 'inherit'};
   font-weight: ${props => props.extent ? 'normal' : 'bold'};
   pointer-events: none;
   ${transitionMixinFn}
@@ -353,7 +353,7 @@ const Legend = styled.div`
 const LegendItem = styled.div`
   display: inline-block;
   opacity: ${props => props.isInactive ? .5 : 1};
-  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}`] : 'inherit'};
+  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}FG`] : 'inherit'};
   transition: opacity .125s ${props => props.theme.bezier};
 
   &:not(:first-child) {
