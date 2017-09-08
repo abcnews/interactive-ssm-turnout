@@ -59,10 +59,10 @@
     </div>
     <script>
       (function (w, d, t, a) {
-        w.onload = () => {
-          const ls = d.getElementsByTagName(t)[0];
-          a.forEach(src => {
-            const s = document.createElement(t);
+        w.onload = function () {
+          var ls = d.getElementsByTagName(t)[0];
+          a.forEach(function (src) {
+            var s = document.createElement(t);
             s.async = true;
             s.src = src;
             ls.parentNode.insertBefore(s, ls);
