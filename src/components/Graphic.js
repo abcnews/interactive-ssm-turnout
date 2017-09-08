@@ -4,13 +4,6 @@ const styled = require('styled-components').default;
 const Total = require('./Total');
 const Chart = require('./Chart');
 
-const Container = styled.div`
-  margin: auto;
-  padding: 1rem;
-  font-family: ${props => props.theme.fontSans};
-  font-size: .875rem;
-`;
-
 class Graphic extends Component {
   constructor({dataURL, scrollyteller}) {
     super();
@@ -115,3 +108,10 @@ function groupsToPct(groups) {
 }
 
 module.exports = Graphic;
+
+const Container = styled.div`
+  margin: auto;
+  padding: 1rem;
+  font-family: ${props => props.theme.fontSans};
+  font-size: .875rem;
+`;

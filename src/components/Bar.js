@@ -4,6 +4,17 @@ const styled = require('styled-components').default;
 const MIN = 0;
 const MAX = 1;
 
+function Bar({value = MIN, max = MAX, shouldTransition}) {
+  return (
+    <Container>
+      <Fill shouldTransition={shouldTransition} value={value} max={max} />
+      <Tick shouldTransition={shouldTransition} value={value} max={max} />
+    </Container>
+  );
+}
+
+module.exports = Bar;
+
 const Container = styled.div`
   position: relative;
   height: 2rem;
@@ -70,18 +81,3 @@ const Tick = styled(Progress)`
     background: none;
   }
 `;
-`
-
-
-`;
-
-function Bar({value = MIN, max = MAX, shouldTransition}) {
-  return (
-    <Container>
-      <Fill shouldTransition={shouldTransition} value={value} max={max} />
-      <Tick shouldTransition={shouldTransition} value={value} max={max} />
-    </Container>
-  );
-}
-
-module.exports = Bar;

@@ -6,6 +6,25 @@ const Bar = require('./Bar');
 const MIN = 0;
 const MAX = 100;
 
+function Total({label, groups, reducer, shouldTransition}) {
+  const pct = Math.min(MAX, Math.max(MIN, reducer(groups))); 
+  const previousPct = this._cachedPct || MIN;
+
+  this._cachedPct = pct;
+
+  return (
+    <Container>
+      <Value>
+        <CountTo from={previousPct} to={pct} digits={1} speed={shouldTransition ? 500 : 0} />%
+      </Value>
+      {label}
+      <Bar value={pct} max={100} shouldTransition={shouldTransition} />
+    </Container>
+  );
+}
+
+module.exports = Total;
+
 const Container = styled.div`
   position: relative;
   text-align: center;
@@ -28,22 +47,3 @@ const Value = styled.div`
     }
   }
 `;
-
-function Total({label, groups, reducer, shouldTransition}) {
-  const pct = Math.min(MAX, Math.max(MIN, reducer(groups))); 
-  const previousPct = this._cachedPct || MIN;
-
-  this._cachedPct = pct;
-
-  return (
-    <Container>
-      <Value>
-        <CountTo from={previousPct} to={pct} digits={1} speed={shouldTransition ? 500 : 0} />%
-      </Value>
-      {label}
-      <Bar value={pct} max={100} shouldTransition={shouldTransition} />
-    </Container>
-  );
-}
-
-module.exports = Total;

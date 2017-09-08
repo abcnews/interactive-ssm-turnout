@@ -3,164 +3,6 @@ const styled = require('styled-components').default;
 const {css, keyframes} = require('styled-components');
 const hint = require('./hint.svg');
 
-const INACTIVE_OPACITY = .5;
-
-const transitionMixin = css`
-  transition:
-    opacity .125s ${props => props.theme.bezier},
-    transform .5s ${props => props.theme.bezier},
-    width .5s ${props => props.theme.bezier},
-    height .5s ${props => props.theme.bezier},
-    left .5s ${props => props.theme.bezier},
-    bottom .5s ${props => props.theme.bezier};
-`;
-
-const transitionMixinFn = props =>
-  props.shouldTransition ? transitionMixin : `transition: opacity .125s ${props.theme.bezier};`
-
-const Container = styled.div`
-  margin-top: 1rem;
-  color: ${props => props.theme.text};
-  line-height: 1;
-  user-select: none;
-`;
-
-const AxisName = styled.div`
-  font-weight: bold;
-  max-width: ${props => props.axis === 'x' ? '6rem' : 'none'};
-  text-align: ${props => props.axis === 'x' ? 'left' : 'center'};
-
-  @media (max-height: 30rem) {
-    max-width: none;
-  }
-}
-`;
-
-const Grid = styled.div`
-  position: relative;
-  margin: 1rem 1.125rem 1.625rem 2.125rem;
-  border: .125rem solid ${props => props.theme.grey};
-  border-top-width: 0;
-  border-right-width: 0;
-  padding-top: 60%;
-  height: 0;
-  font-size: .75rem;
-
-  @media (max-height: 30rem) {
-    padding-top: 30%;
-  }
-`;
-
-// const Gridline = styled.div`
-//   opacity: .3;
-//   transform: ${props => props.axis === 'x' ? 'translate(-50%, 0)' : 'translate(0, 50%)'};
-//   position: absolute;
-//   bottom: ${props => props.axis === 'x' ? '0' : props.isMid ? '50%' : 'auto'};
-//   left: ${props => props.axis === 'y' ? '0' : props.isMid ? '50%' : 'auto'};
-//   width: ${props => props.axis === 'y' && props.isMid ? '100%' : '.125rem'};
-//   height: ${props => props.axis === 'x' && props.isMid ? '100%' : '.125rem'};
-//   background: ${props => props.groupKey ? props.theme[`group${props.groupKey}BG`] : props.theme.grey};
-//   ${transitionMixinFn}
-// `;
-
-const Gridline = styled.div`
-  opacity: ${props => props.isInactive ? 0 : .3};
-  transform: ${props => props.axis === 'x' ? 'translate(-50%, 0)' : 'translate(0, 50%)'};
-  position: absolute;
-  bottom: ${props => props.axis === 'x' ? '0' : `${props.y}%`};
-  left: ${props => props.axis === 'y' ? '0' : `${props.x}%`};
-  width: ${props => props.axis === 'y' ? `${props.x}%` : '.125rem'};
-  height: ${props => props.axis === 'x' ? `${props.y}%` : '.125rem'};
-  background: ${props => props.groupKey ? props.theme[`group${props.groupKey}BG`] : props.theme.grey};
-  ${transitionMixinFn}
-`;
-
-const Label = styled.div`
-  opacity: ${props => props.isHidden ? 0 : 1};
-  transform: translate(${props => props.axis ==='x' ? '-50%' : '-.375rem'}, ${props => props.axis ==='y' ? '50%' : '.375rem'});
-  position: absolute;
-  top: ${props => props.axis !== 'y' ? '100%' : 'auto'};
-  right: ${props => props.axis !== 'x' ? '100%' : 'auto'};
-  bottom: ${props => props.axis === 'y' && props.extent === 'max' ? '100%' : 'auto'};
-  left: ${props => props.axis === 'x' && props.extent === 'max' ? '100%' : 'auto'};
-  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}`] : 'inherit'};
-  font-weight: ${props => props.extent ? 'normal' : 'bold'};
-  pointer-events: none;
-  ${transitionMixinFn}
-
-  @supports (-webkit-text-stroke-width: 0) or (-moz-text-stroke-width: 0) {
-    &::before {
-      content: attr(data-text);
-      position: absolute;
-      left: 0;
-      z-index: -1;
-      -webkit-text-stroke-color: #fff;
-      -moz-text-stroke-color: #fff;
-      -webkit-text-stroke-width: .125rem;
-      -moz-text-stroke-width: .125rem;
-    }
-  }
-`;
-
-const Shape = styled.div`
-  transform: ${props => props.groupKey === 2 ? 'rotate(45deg)' : 'none'};
-  width: ${props => `${1 + (props.groupKey - 2) * .0625}rem`};
-  height: ${props => `${1 + (props.groupKey - 2) * .0625}rem`};
-  background-color: ${props => props.groupKey ? props.theme[`group${props.groupKey}BG`] : props.theme.grey};
-  border-radius: ${props => props.groupKey === 3 ? '50%' : '.125rem'};
-  box-shadow: inset 0 0 0 .0625rem rgba(0, 0, 0, .1);
-`;
-
-const Point = styled.div`
-  transform: ${props => `translate(-50%, 50%)${props.isInteractive ? ' scale(2)' : ''}`};
-  position: absolute;
-  ${transitionMixinFn}
-  cursor: ${props => props.isInteractive ? 'pointer' : 'default'};
-`;
-
-const dragHintKeyframes = keyframes`
-  0%, 100% {
-    transform: translate(-50%, 50%) scale(.9);
-  }
-  50% {
-    transform: translate(-50%, 50%) scale(1.1);
-  }
-`;
-
-const DragHint = styled.div`
-  opacity: 0;
-	position: absolute;
-	width: 3.75rem;
-	height: 3.75rem;
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-image: url(${hint});
-  ${transitionMixinFn}
-	animation: 1.25s ${dragHintKeyframes} infinite;
-	pointer-events: none;
-`;
-
-const Legend = styled.div`
-  margin: 1rem 0 0 2.125rem;
-`;
-
-const LegendItem = styled.div`
-  display: inline-block;
-  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}`] : 'inherit'};
-  transition: opacity .125s ${props => props.theme.bezier};
-
-  &:not(:first-child) {
-    margin-left: .75rem;
-  }
-
-  & > * {
-    display: inline-block;
-    margin-right: ${props => props.groupKey === 2 ? '.325rem' : '.25rem'};
-    font-size: .75rem;
-    vertical-align: middle;
-  }
-`;
-
 class Chart extends Component {
   constructor({groups}) {
     super();
@@ -261,8 +103,8 @@ class Chart extends Component {
     const maxYLabel = Math.max.apply(Math, groups.map(group => group.yLabel));
 
     const midGridines = [
-      <Gridline axis="x" x={50} y={100}></Gridline>,
-      <Gridline axis="y" x={100} y={50}></Gridline>
+      <Gridline axis="x" style={{left: '50%', height: '100%'}}></Gridline>,
+      <Gridline axis="y" style={{bottom: '50%', width: '100%'}}></Gridline>
     ];
 
     const extentLabels = [
@@ -275,84 +117,88 @@ class Chart extends Component {
     const groupLabels = [];
     const groupPoints = [];
     const dragHints = [];
+    const legendItems = [];
 
     this.state.zOrder.forEach(key => {
       groups
       .filter(group => group.key === key)
       .forEach(group => {
+        const isInactive = dragTargetKey && group.key !== dragTargetKey;
+
         groupGridlines.push(
           <Gridline
             key={`group${group.key}XGridline`}
             axis="x"
-            x={group.x}
-            y={group.y}
             groupKey={group.key}
             shouldTransition={shouldTransition}
-            isInactive={dragTargetKey && group.key !== dragTargetKey}
+            isInactive={isInactive}
+            style={{left: `${group.x}%`, height: `${group.y}%`}}
           ></Gridline>,
           <Gridline
             key={`group${group.key}YGridline`}
             axis="y"
-            x={group.x}
-            y={group.y}
             groupKey={group.key}
             shouldTransition={shouldTransition}
-            isInactive={dragTargetKey && group.key !== dragTargetKey}
+            isInactive={isInactive}
+            style={{bottom: `${group.y}%`, width: `${group.x}%`}}
           ></Gridline>
         );
+
         groupLabels.push(
           <Label
             key={`group${group.key}XLabel`}
             axis="x"
             groupKey={group.key}
             shouldTransition={shouldTransition}
+            isInactive={isInactive}
+            style={{left: `${group.xLabel}%`}}
             data-text={`${Math.round(group.x)}%`}
-            style={{
-              left: `${group.xLabel}%`,
-              opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''
-            }}
           >{Math.round(group.x)}%</Label>,
           <Label
             key={`group${group.key}YLabel`}
             axis="y"
             groupKey={group.key}
             shouldTransition={shouldTransition}
+            isInactive={isInactive}
+            style={{bottom: `${group.yLabel}%`}}
             data-text={`${Math.round(group.y)}%`}
-            style={{
-              bottom: `${group.yLabel}%`,
-              opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''
-            }}
           >{Math.round(group.y)}%</Label>
         );
+
         groupPoints.push(
           <Point
             key={`group${group.key}Point`}
             isInteractive={isInteractive}
             shouldTransition={shouldTransition}
-            style={{
-              left: `${group.x}%`,
-              bottom: `${group.y}%`,
-              opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''
-            }}
+            isInactive={isInactive}
+            style={{bottom: `${group.y}%`, left: `${group.x}%`}}
             onMouseDown={isInteractive ? this.onDragStart.bind(this, group.key) : null}
             onTouchStart={isInteractive ? this.onDragStart.bind(this, group.key) : null}
           >
             <Shape groupKey={group.key}></Shape>
           </Point>
         );
+
         if (typeof this.state.dragTargetKey === 'undefined') {
           dragHints.push(
             <DragHint
               shouldTransition={shouldTransition}
-              style={{
-                opacity: isInteractive ? 1 : '',
-                left: `${group.x}%`,
-                bottom: `${group.y}%`}}
+              isHidden={!isInteractive}
+              style={{bottom: `${group.y}%`, left: `${group.x}%`}}
             ></DragHint>
           );
         }
+
+        legendItems.push(
+          <LegendItem groupKey={group.key} isInactive={dragTargetKey && group.key !== dragTargetKey}>
+            <Shape groupKey={group.key}></Shape>
+            <div>{group.name}</div>
+          </LegendItem>
+        );
       });
     });
+
+    legendItems.sort((a, b) => a.attributes.groupKey - b.attributes.groupKey);
 
     return (
       <Container>
@@ -367,15 +213,7 @@ class Chart extends Component {
         </Grid>
         <AxisName axis="y">Percent of ‘Yes’ votes</AxisName>
         <Legend>
-          {groups.map(group => (
-          <LegendItem
-            groupKey={group.key}
-            style={{opacity: dragTargetKey && group.key !== dragTargetKey ? INACTIVE_OPACITY : ''}}
-          >
-            <Shape groupKey={group.key}></Shape>
-            <div>{group.name}</div>
-          </LegendItem>
-          ))}
+          {legendItems}
         </Legend>
       </Container>
     );
@@ -383,6 +221,151 @@ class Chart extends Component {
 }
 
 module.exports = Chart;
+
+const transitionMixin = css`
+  transition:
+    opacity .125s ${props => props.theme.bezier},
+    transform .5s ${props => props.theme.bezier},
+    width .5s ${props => props.theme.bezier},
+    height .5s ${props => props.theme.bezier},
+    left .5s ${props => props.theme.bezier},
+    bottom .5s ${props => props.theme.bezier};
+`;
+
+const transitionMixinFn = props =>
+  props.shouldTransition ? transitionMixin : `transition: opacity .125s ${props.theme.bezier};`
+
+const Container = styled.div`
+  margin-top: 1rem;
+  color: ${props => props.theme.text};
+  line-height: 1;
+  user-select: none;
+`;
+
+const AxisName = styled.div`
+  font-weight: bold;
+  max-width: ${props => props.axis === 'x' ? '6rem' : 'none'};
+  text-align: ${props => props.axis === 'x' ? 'left' : 'center'};
+
+  @media (max-height: 30rem) {
+    max-width: none;
+  }
+}
+`;
+
+const Grid = styled.div`
+  position: relative;
+  margin: 1rem 1.125rem 1.625rem 2.125rem;
+  border: .125rem solid ${props => props.theme.grey};
+  border-top-width: 0;
+  border-right-width: 0;
+  padding-top: 60%;
+  height: 0;
+  font-size: .75rem;
+
+  @media (max-height: 30rem) {
+    padding-top: 30%;
+  }
+`;
+
+const Gridline = styled.div`
+  opacity: ${props => props.isInactive ? 0 : .3};
+  transform: ${props => props.axis === 'x' ? 'translate(-50%, 0)' : 'translate(0, 50%)'};
+  position: absolute;
+  bottom: ${props => props.axis === 'x' ? '0' : 'auto'};
+  left: ${props => props.axis === 'y' ? '0' : 'auto'};
+  width: .125rem;
+  height: .125rem;
+  background: ${props => props.groupKey ? props.theme[`group${props.groupKey}BG`] : props.theme.grey};
+  ${transitionMixinFn}
+`;
+
+const Label = styled.div`
+  opacity: ${props => props.isHidden ? 0 : props.isInactive ? .5 : 1};
+  transform: translate(${props => props.axis ==='x' ? '-50%' : '-.375rem'}, ${props => props.axis ==='y' ? '50%' : '.375rem'});
+  position: absolute;
+  top: ${props => props.axis !== 'y' ? '100%' : 'auto'};
+  right: ${props => props.axis !== 'x' ? '100%' : 'auto'};
+  bottom: ${props => props.axis === 'y' && props.extent === 'max' ? '100%' : 'auto'};
+  left: ${props => props.axis === 'x' && props.extent === 'max' ? '100%' : 'auto'};
+  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}`] : 'inherit'};
+  font-weight: ${props => props.extent ? 'normal' : 'bold'};
+  pointer-events: none;
+  ${transitionMixinFn}
+
+  @supports (-webkit-text-stroke-width: 0) or (-moz-text-stroke-width: 0) {
+    &::before {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      z-index: -1;
+      -webkit-text-stroke-color: #fff;
+      -moz-text-stroke-color: #fff;
+      -webkit-text-stroke-width: .125rem;
+      -moz-text-stroke-width: .125rem;
+    }
+  }
+`;
+
+const Shape = styled.div`
+  transform: ${props => props.groupKey === 2 ? 'rotate(45deg)' : 'none'};
+  width: ${props => `${1 + (props.groupKey - 2) * .0625}rem`};
+  height: ${props => `${1 + (props.groupKey - 2) * .0625}rem`};
+  background-color: ${props => props.groupKey ? props.theme[`group${props.groupKey}BG`] : props.theme.grey};
+  border-radius: ${props => props.groupKey === 3 ? '50%' : '.125rem'};
+  box-shadow: inset 0 0 0 .0625rem rgba(0, 0, 0, .1);
+`;
+
+const Point = styled.div`
+  opacity: ${props => props.isInactive ? .5 : 1};
+  transform: ${props => `translate(-50%, 50%)${props.isInteractive ? ' scale(2)' : ''}`};
+  position: absolute;
+  ${transitionMixinFn}
+  cursor: ${props => props.isInteractive ? 'pointer' : 'default'};
+`;
+
+const dragHintKeyframes = keyframes`
+  0%, 100% {
+    transform: translate(-50%, 50%) scale(.9);
+  }
+  50% {
+    transform: translate(-50%, 50%) scale(1.1);
+  }
+`;
+
+const DragHint = styled.div`
+  opacity: ${props => props.isHidden ? 0 : 1};
+	position: absolute;
+	width: 3.75rem;
+	height: 3.75rem;
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-image: url(${hint});
+  ${transitionMixinFn}
+	animation: 1.25s ${dragHintKeyframes} infinite;
+	pointer-events: none;
+`;
+
+const Legend = styled.div`
+  margin: 1rem 0 0 2.125rem;
+`;
+
+const LegendItem = styled.div`
+  display: inline-block;
+  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}`] : 'inherit'};
+  transition: opacity .125s ${props => props.theme.bezier};
+
+  &:not(:first-child) {
+    margin-left: .75rem;
+  }
+
+  & > * {
+    display: inline-block;
+    margin-right: ${props => props.groupKey === 2 ? '.325rem' : '.25rem'};
+    font-size: .75rem;
+    vertical-align: middle;
+  }
+`;
 
 function relaxLabels(groups) {
   const maxIterations = 10;
