@@ -179,7 +179,7 @@ class Chart extends Component {
           </Point>
         );
 
-        if (typeof this.state.dragTargetKey === 'undefined') {
+        if (typeof dragTargetKey === 'undefined') {
           dragHints.push(
             <DragHint
               shouldTransition={shouldTransition}
@@ -352,6 +352,7 @@ const Legend = styled.div`
 
 const LegendItem = styled.div`
   display: inline-block;
+  opacity: ${props => props.isInactive ? .5 : 1};
   color: ${props => props.groupKey ? props.theme[`group${props.groupKey}`] : 'inherit'};
   transition: opacity .125s ${props => props.theme.bezier};
 
