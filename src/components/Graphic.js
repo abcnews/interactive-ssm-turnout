@@ -12,10 +12,12 @@ class Graphic extends Component {
     this.updateGroup = this.updateGroup.bind(this);
     this.toggleTransitions = this.toggleTransitions.bind(this);
 
+    this.dataById = {};
+
     this.state = {
-      dataById: {},
+      id: null,
       groups: [],
-      isInteractive: false,
+      isEditable: false,
       shouldTransition: true
     };
 
@@ -24,15 +26,14 @@ class Graphic extends Component {
         throw err;
       }
 
-      this.setState({
-        dataById: data.reduce((memo, row) => {
-          memo[row.id] = row;
+      this.dataById = data.reduce((memo, row) => {
+        memo[row.id] = row;
 
-          return memo;
-        }, {}),
-      });
+        return memo;
+      }, {});
 
       document.addEventListener('mark', this.onMark);
+
       this.onMark({
         detail: scrollyteller.activated ? scrollyteller : {activated: {config: {id: data[0].id}}}
       });
@@ -48,33 +49,34 @@ class Graphic extends Component {
       return;
     }
 
-    const row =  this.state.dataById[detail.activated.config.id];
-    const groups = row ? rowToGroups(row) : this.state.groups;
-    const isInteractive = typeof detail.activated.config.interactive === 'boolean' ? 
-      detail.activated.config.interactive : false;
+    const id = detail.activated.config.id;
+    const isEditable = typeof detail.activated.config.editable === 'boolean' ? 
+      detail.activated.config.editable : false;
+
+    this.loadRow(id, isEditable);
+  }
+
+  loadRow(id, isEditable) {
+    const groups = this.dataById[id] ? rowToGroups(this.dataById[id]) : this.state.groups;
 
     this.setState({
+      id,
       groups,
-      isInteractive
+      isEditable
     });
   }
 
   updateGroup(key, x, y) {
-    this.state.groups
-    .filter(group => group.key === key)
-    .forEach((group, index) => {
-      group.x = x;
-      group.y = y;
-    });
-
-    this.setState();
+    this.dataById[this.state.id][`x${key}`] = x;
+    this.dataById[this.state.id][`y${key}`] = y;
+    this.loadRow(this.state.id, this.state.isEditable);
   }
 
   toggleTransitions(shouldTransition) {
     this.setState({shouldTransition});
   }
 
-  render({}, {groups, isInteractive, shouldTransition}) {
+  render({}, {groups, isEditable, shouldTransition}) {
     return (
       <Container>
         <Total
@@ -84,7 +86,7 @@ class Graphic extends Component {
           shouldTransition={shouldTransition} />
         <Chart
           groups={groups}
-          isInteractive={isInteractive}
+          isEditable={isEditable}
           shouldTransition={shouldTransition}
           toggleTransitions={this.toggleTransitions}
           updateGroup={this.updateGroup} />

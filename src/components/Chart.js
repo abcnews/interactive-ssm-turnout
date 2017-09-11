@@ -94,7 +94,7 @@ class Chart extends Component {
     this.props.toggleTransitions(true);
   }
 
-  render({groups, isInteractive, shouldTransition}, {dragTargetKey}) {
+  render({groups, isEditable, shouldTransition}, {dragTargetKey}) {
     relaxLabels(groups);
 
     const minXLabel = Math.min.apply(Math, groups.map(group => group.xLabel));
@@ -168,12 +168,12 @@ class Chart extends Component {
         groupPoints.push(
           <Point
             key={`group${group.key}Point`}
-            isInteractive={isInteractive}
+            isEditable={isEditable}
             shouldTransition={shouldTransition}
             isInactive={isInactive}
             style={{bottom: `${group.y}%`, left: `${group.x}%`}}
-            onMouseDown={isInteractive ? this.onDragStart.bind(this, group.key) : null}
-            onTouchStart={isInteractive ? this.onDragStart.bind(this, group.key) : null}
+            onMouseDown={isEditable ? this.onDragStart.bind(this, group.key) : null}
+            onTouchStart={isEditable ? this.onDragStart.bind(this, group.key) : null}
           >
             <Shape groupKey={group.key}></Shape>
           </Point>
@@ -183,7 +183,7 @@ class Chart extends Component {
           dragHints.push(
             <DragHint
               shouldTransition={shouldTransition}
-              isHidden={!isInteractive}
+              isHidden={!isEditable}
               style={{bottom: `${group.y}%`, left: `${group.x}%`}}
             ></DragHint>
           );
@@ -318,10 +318,10 @@ const Shape = styled.div`
 
 const Point = styled.div`
   opacity: ${props => props.isInactive ? .5 : 1};
-  transform: ${props => `translate(-50%, 50%)${props.isInteractive ? ' scale(2)' : ''}`};
+  transform: ${props => `translate(-50%, 50%)${props.isEditable ? ' scale(2)' : ''}`};
   position: absolute;
   ${transitionMixinFn}
-  cursor: ${props => props.isInteractive ? 'pointer' : 'default'};
+  cursor: ${props => props.isEditable ? 'pointer' : 'default'};
 `;
 
 const dragHintKeyframes = keyframes`
