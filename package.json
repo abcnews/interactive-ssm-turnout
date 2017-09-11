@@ -19,7 +19,7 @@
     "start": "aunty serve"
   },
   "devDependencies": {
-    "@abcnews/aunty": "5.1.x",
+    "@abcnews/aunty": "^5.1.3",
     "babel-plugin-styled-components": "^1.2.0"
   },
   "dependencies": {
