@@ -17,6 +17,7 @@ class Graphic extends Component {
     this.state = {
       id: null,
       groups: [],
+      isKnown: false,
       isEditable: false,
       shouldTransition: true
     };
@@ -34,9 +35,9 @@ class Graphic extends Component {
 
       document.addEventListener('mark', this.onMark);
 
-      this.onMark({
-        detail: scrollyteller.activated ? scrollyteller : {activated: {config: {id: data[0].id}}}
-      });
+      if (scrollyteller.activated) {
+        this.onMark({detail: scrollyteller});
+      }
     });
   }
 
@@ -50,39 +51,43 @@ class Graphic extends Component {
     }
 
     const id = detail.activated.config.id;
+    const isKnown = typeof detail.activated.config.known === 'boolean' ? 
+      detail.activated.config.known : false;
     const isEditable = typeof detail.activated.config.editable === 'boolean' ? 
       detail.activated.config.editable : false;
 
-    this.loadRow(id, isEditable);
+    this.loadRow(id, isKnown, isEditable);
   }
 
-  loadRow(id, isEditable) {
+  loadRow(id, isKnown, isEditable) {
     const groups = this.dataById[id] ? rowToGroups(this.dataById[id]) : this.state.groups;
 
     this.setState({
       id,
       groups,
+      isKnown,
       isEditable
     });
   }
 
   updateGroup(key, x, y) {
     this.dataById[this.state.id][`x${key}`] = x;
+    this.dataById[this.state.id][`xk${key}`] = x;
     this.dataById[this.state.id][`y${key}`] = y;
-    this.loadRow(this.state.id, this.state.isEditable);
+    this.loadRow(this.state.id, this.state.isKnown, this.state.isEditable);
   }
 
   toggleTransitions(shouldTransition) {
     this.setState({shouldTransition});
   }
 
-  render({}, {groups, isEditable, shouldTransition}) {
+  render({}, {groups, isKnown, isEditable, shouldTransition}) {
     return (
       <Container>
         <Total
-          label="of the total votes are ‘Yes’"
+          label={`of ${isKnown ? 'declared' : 'the total'} votes are ‘Yes’`}
           groups={groups}
-          reducer={groupsToPct}
+          reducer={groupsToPct.bind(this, isKnown)}
           shouldTransition={shouldTransition} />
         <Chart
           groups={groups}
@@ -97,16 +102,16 @@ class Graphic extends Component {
 
 function rowToGroups(row) {
   return [
-    {key: 1, name: 'Age 18-34', p: +row.p1, x: +row.x1, y: +row.y1},
-    {key: 2, name: 'Age 35-54', p: +row.p2, x: +row.x2, y: +row.y2},
-    {key: 3, name: 'Age 55+', p: +row.p3, x: +row.x3, y: +row.y3}
+    {key: 1, name: 'Age 18-34', p: +row.p1, pk: +row.pk1, x: +row.x1, xk: +row.xk1, y: +row.y1},
+    {key: 2, name: 'Age 35-54', p: +row.p2, pk: +row.pk2, x: +row.x2, xk: +row.xk2, y: +row.y2},
+    {key: 3, name: 'Age  55+', p: +row.p3, pk: +row.pk3, x: +row.x3, xk: +row.xk3, y: +row.y3}
   ];
 }
 
-function groupsToPct(groups) {
+function groupsToPct(isKnown, groups) {
   return groups.length === 0 ? 0 :
-    groups.reduce((memo, group) => memo + (group.p * group.x * group.y), 0) /
-    groups.reduce((memo, group) => memo + (group.p * group.y / 100), 0) / 100;
+    groups.reduce((memo, group) => memo + (group[isKnown ? 'pk' : 'p'] * group[isKnown ? 'xk' : 'x'] * group.y), 0) /
+    groups.reduce((memo, group) => memo + (group[isKnown ? 'pk' : 'p'] * group.y / 100), 0) / 100;
 }
 
 module.exports = Graphic;
