@@ -75,7 +75,7 @@ class Chart extends Component {
   onDrag(event) {
     const {x, y} = this.translatePointerToValue(event.touches ? event.touches[0] : event);
 
-    this.props.updateGroup(this.state.dragTargetKey, x, y);
+    this.props.editGroup(this.state.dragTargetKey, x, y);
   }
 
   onDragEnd(event) {

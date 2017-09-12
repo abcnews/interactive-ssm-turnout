@@ -9,7 +9,7 @@ class Graphic extends Component {
     super();
 
     this.onMark = this.onMark.bind(this);
-    this.updateGroup = this.updateGroup.bind(this);
+    this.editGroup = this.editGroup.bind(this);
     this.toggleTransitions = this.toggleTransitions.bind(this);
 
     this.dataById = {};
@@ -70,10 +70,14 @@ class Graphic extends Component {
     });
   }
 
-  updateGroup(key, x, y) {
-    this.dataById[this.state.id][`x${key}`] = x;
-    this.dataById[this.state.id][`xk${key}`] = x;
-    this.dataById[this.state.id][`y${key}`] = y;
+  editGroup(key, x, y) {
+    const row = this.dataById[this.state.id];
+    
+    // row[`xk${key}`] = row[`xk${key}`] / (row[`pk${key}`]) x;
+    row[`xk${key}`] = x;
+    row[`x${key}`] = x;
+    row[`y${key}`] = y;
+
     this.loadRow(this.state.id, this.state.isKnown, this.state.isEditable);
   }
 
@@ -94,7 +98,7 @@ class Graphic extends Component {
           isEditable={isEditable}
           shouldTransition={shouldTransition}
           toggleTransitions={this.toggleTransitions}
-          updateGroup={this.updateGroup} />
+          editGroup={this.editGroup} />
       </Container>
     );
   }
