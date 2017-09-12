@@ -39,8 +39,8 @@ class Chart extends Component {
 
   translatePointerToValue(pointer) {
     return {
-      x: Math.max(Math.min(pointer.clientX - this.gridRect.left, this.gridRect.width), 0) / this.gridRect.width * 100,
-      y: 100 - Math.max(Math.min(pointer.clientY - this.gridRect.top, this.gridRect.height), 0) / this.gridRect.height * 100
+      x: Math.max(Math.min(pointer.clientX - this.gridRect.left, this.gridRect.width), 0) / this.gridRect.width,
+      y: 1 - Math.max(Math.min(pointer.clientY - this.gridRect.top, this.gridRect.height), 0) / this.gridRect.height
     };
   }
 
@@ -108,9 +108,9 @@ class Chart extends Component {
     ];
 
     const extentLabels = [
-      <Label extent="min" isHidden={minXLabel < 1 || minYLabel < 1}>0%</Label>,
-      <Label extent="max" axis="x" isHidden={maxXLabel > 90}>100%</Label>,
-      <Label extent="max" axis="y" isHidden={maxYLabel > 94}>100%</Label>
+      <Label extent="min" isHidden={minXLabel < .01 || minYLabel < .01}>0%</Label>,
+      <Label extent="max" axis="x" isHidden={maxXLabel > .9}>100%</Label>,
+      <Label extent="max" axis="y" isHidden={maxYLabel > .94}>100%</Label>
     ];
 
     const groupGridlines = [];
@@ -132,7 +132,7 @@ class Chart extends Component {
             groupKey={group.key}
             shouldTransition={shouldTransition}
             isInactive={isInactive}
-            style={{left: `${group.x}%`, height: `${group.y}%`}}
+            style={{left: `${group.x * 100}%`, height: `${group.y * 100}%`}}
           ></Gridline>,
           <Gridline
             key={`group${group.key}YGridline`}
@@ -140,7 +140,7 @@ class Chart extends Component {
             groupKey={group.key}
             shouldTransition={shouldTransition}
             isInactive={isInactive}
-            style={{bottom: `${group.y}%`, width: `${group.x}%`}}
+            style={{bottom: `${group.y * 100}%`, width: `${group.x * 100}%`}}
           ></Gridline>
         );
 
@@ -151,18 +151,18 @@ class Chart extends Component {
             groupKey={group.key}
             shouldTransition={shouldTransition}
             isInactive={isInactive}
-            style={{left: `${group.xLabel}%`}}
-            data-text={`${Math.round(group.x)}%`}
-          >{Math.round(group.x)}%</Label>,
+            style={{left: `${group.xLabel * 100}%`}}
+            data-text={`${Math.round(group.x * 100)}%`}
+          >{Math.round(group.x * 100)}%</Label>,
           <Label
             key={`group${group.key}YLabel`}
             axis="y"
             groupKey={group.key}
             shouldTransition={shouldTransition}
             isInactive={isInactive}
-            style={{bottom: `${group.yLabel}%`}}
-            data-text={`${Math.round(group.y)}%`}
-          >{Math.round(group.y)}%</Label>
+            style={{bottom: `${group.yLabel * 100}%`}}
+            data-text={`${Math.round(group.y * 100)}%`}
+          >{Math.round(group.y * 100)}%</Label>
         );
 
         groupPoints.push(
@@ -171,7 +171,7 @@ class Chart extends Component {
             isEditable={isEditable}
             shouldTransition={shouldTransition}
             isInactive={isInactive}
-            style={{bottom: `${group.y}%`, left: `${group.x}%`}}
+            style={{bottom: `${group.y * 100}%`, left: `${group.x * 100}%`}}
             onMouseDown={isEditable ? this.onDragStart.bind(this, group.key) : null}
             onTouchStart={isEditable ? this.onDragStart.bind(this, group.key) : null}
           >
@@ -184,7 +184,7 @@ class Chart extends Component {
             <DragHint
               shouldTransition={shouldTransition}
               isHidden={!isEditable}
-              style={{bottom: `${group.y}%`, left: `${group.x}%`}}
+              style={{bottom: `${group.y * 100}%`, left: `${group.x * 100}%`}}
             ></DragHint>
           );
         }
@@ -370,7 +370,7 @@ const LegendItem = styled.div`
 
 function relaxLabels(groups) {
   const maxIterations = 10;
-  const shift = .5;
+  const shift = .005;
 
   groups.forEach(group => {
     group.xLabel = group.x;
@@ -389,9 +389,9 @@ function relaxLabels(groups) {
         const bY = b.yLabel;
         const diffX = aX - bX;
         const diffY = aY - bY;
-        const xChars = (String(Math.round(aX)) + String(Math.round(bX))).length + 2;
+        const xChars = (String(Math.round(aX * 100)) + String(Math.round(bX * 100))).length + 2;
 
-        if (Math.abs(diffX) < xChars * 1.55) {
+        if (Math.abs(diffX) < xChars * .0155) {
           const signX = diffX > 0 ? 1 : -1;
 
           a.xLabel = aX + signX * shift;
@@ -400,7 +400,7 @@ function relaxLabels(groups) {
           shouldIterate = true;
         }
 
-        if (Math.abs(diffY) < 5) {
+        if (Math.abs(diffY) < .05) {
           const signY = diffY > 0 ? 1 : -1;
 
           a.yLabel = aY + signY * shift;

@@ -4,21 +4,21 @@ const CountTo = require('react-count-to').default;
 const Bar = require('./Bar');
 
 const MIN = 0;
-const MAX = 100;
+const MAX = 1;
 
 function Total({label, groups, reducer, shouldTransition}) {
-  const pct = Math.min(MAX, Math.max(MIN, reducer(groups))); 
-  const previousPct = this._cachedPct || MIN;
+  const value = Math.min(MAX, Math.max(MIN, reducer(groups))); 
+  const previousValue = this._cachedValue || MIN;
 
-  this._cachedPct = pct;
+  this._cachedValue = value;
 
   return (
     <Container>
       <Value>
-        <CountTo from={previousPct} to={pct} digits={1} speed={shouldTransition ? 500 : 0} />%
+        <CountTo from={previousValue * 100} to={value * 100} digits={1} speed={shouldTransition ? 500 : 0} />%
       </Value>
       {label}
-      <Bar value={pct} max={100} shouldTransition={shouldTransition} />
+      <Bar value={value} shouldTransition={shouldTransition} />
     </Container>
   );
 }

@@ -70,14 +70,9 @@ class Graphic extends Component {
     });
   }
 
-  editGroup(key, x, y) {
-    const row = this.dataById[this.state.id];
-    
-    // row[`xk${key}`] = row[`xk${key}`] / (row[`pk${key}`]) x;
-    row[`xk${key}`] = x;
-    row[`x${key}`] = x;
-    row[`y${key}`] = y;
-
+  editGroup(key, x, y) {   
+    this.dataById[this.state.id][`x${key}`] = x;
+    this.dataById[this.state.id][`y${key}`] = y;
     this.loadRow(this.state.id, this.state.isKnown, this.state.isEditable);
   }
 
@@ -106,16 +101,22 @@ class Graphic extends Component {
 
 function rowToGroups(row) {
   return [
-    {key: 1, name: 'Age 18-34', p: +row.p1, pk: +row.pk1, x: +row.x1, xk: +row.xk1, y: +row.y1},
-    {key: 2, name: 'Age 35-54', p: +row.p2, pk: +row.pk2, x: +row.x2, xk: +row.xk2, y: +row.y2},
-    {key: 3, name: 'Age  55+', p: +row.p3, pk: +row.pk3, x: +row.x3, xk: +row.xk3, y: +row.y3}
+    {key: 1, name: 'Age 18-34', p: +row.p1, u: +row.u1, x: +row.x1, y: +row.y1},
+    {key: 2, name: 'Age 35-54', p: +row.p2, u: +row.u2, x: +row.x2, y: +row.y2},
+    {key: 3, name: 'Age  55+', p: +row.p3, u: +row.u3, x: +row.x3, y: +row.y3}
   ];
 }
 
 function groupsToPct(isKnown, groups) {
   return groups.length === 0 ? 0 :
-    groups.reduce((memo, group) => memo + (group[isKnown ? 'pk' : 'p'] * group[isKnown ? 'xk' : 'x'] * group.y), 0) /
-    groups.reduce((memo, group) => memo + (group[isKnown ? 'pk' : 'p'] * group.y / 100), 0) / 100;
+    groups.reduce((memo, group) => memo + group.p * group.x * group.y, 0) /
+    groups.reduce((memo, group) => memo + group.p * group.y, 0);
+}
+
+function groupsToPct(isKnown, groups) {
+  return groups.length === 0 ? 0 :
+    groups.reduce((memo, group) => memo + group.p * (1 - (isKnown ? group.u : 0)) * group.y * group.x / (1 - (isKnown ? group.u : 0)), 0) /
+    groups.reduce((memo, group) => memo + group.p * (1 - (isKnown ? group.u : 0)) * group.y, 0);
 }
 
 module.exports = Graphic;
