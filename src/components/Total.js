@@ -8,7 +8,7 @@ const MAX = 1;
 
 function Total({label, groups, reducer, shouldTransition}) {
   const value = Math.min(MAX, Math.max(MIN, reducer(groups))); 
-  const previousValue = this._cachedValue || MIN;
+  const previousValue = this._cachedValue || value;
 
   this._cachedValue = value;
 

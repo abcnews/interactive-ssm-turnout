@@ -1,18 +1,17 @@
-const {csv} = require('d3-request');
 const {h, Component} = require('preact');
 const styled = require('styled-components').default;
 const Total = require('./Total');
 const Chart = require('./Chart');
 
 class Graphic extends Component {
-  constructor({dataURL, scrollyteller}) {
+  constructor({data, scrollyteller}) {
     super();
 
     this.onMark = this.onMark.bind(this);
     this.editGroup = this.editGroup.bind(this);
     this.toggleTransitions = this.toggleTransitions.bind(this);
 
-    this.dataById = {};
+    this.data = data;
 
     this.state = {
       id: null,
@@ -22,23 +21,11 @@ class Graphic extends Component {
       shouldTransition: true
     };
 
-    csv(dataURL, (err, data) => {
-      if (err) {
-        throw err;
-      }
+    if (scrollyteller.activated) {
+      this.onMark({detail: scrollyteller});
+    }
 
-      this.dataById = data.reduce((memo, row) => {
-        memo[row.id] = row;
-
-        return memo;
-      }, {});
-
-      document.addEventListener('mark', this.onMark);
-
-      if (scrollyteller.activated) {
-        this.onMark({detail: scrollyteller});
-      }
-    });
+    document.addEventListener('mark', this.onMark);
   }
 
   componentWillUnmount() {
@@ -60,7 +47,7 @@ class Graphic extends Component {
   }
 
   loadRow(id, isKnown, isEditable) {
-    const groups = this.dataById[id] ? rowToGroups(this.dataById[id]) : this.state.groups;
+    const groups = this.data[id] ? rowToGroups(this.data[id]) : this.state.groups;
 
     this.setState({
       id,
@@ -71,8 +58,8 @@ class Graphic extends Component {
   }
 
   editGroup(key, x, y) {   
-    this.dataById[this.state.id][`x${key}`] = x;
-    this.dataById[this.state.id][`y${key}`] = y;
+    this.data[this.state.id][`x${key}`] = x;
+    this.data[this.state.id][`y${key}`] = y;
     this.loadRow(this.state.id, this.state.isKnown, this.state.isEditable);
   }
 
