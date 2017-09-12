@@ -1,6 +1,6 @@
 const {h, render} = require('preact');
-
-require('./global.css');
+const {ThemeProvider} = require('styled-components');
+const {theme} = require('./styles');
 
 const root = document.querySelector('[data-interactive-ssm-turnout-root]');
 
@@ -17,7 +17,13 @@ function init() {
     stage.appendChild(root);
   }
 
-  render(<Graphic dataURL={root.dataset.data} scrollyteller={stage.__SCROLLYTELLER__} />, root, root.firstChild);
+  render(
+    <ThemeProvider theme={theme}>
+      <Graphic dataURL={root.dataset.data} scrollyteller={stage.__SCROLLYTELLER__} />
+    </ThemeProvider>,
+    root,
+    root.firstChild
+  );
 }
 
 init();
