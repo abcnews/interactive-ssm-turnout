@@ -16,7 +16,6 @@ class Graphic extends Component {
     this.state = {
       id: null,
       groups: [],
-      isKnown: false,
       isEditable: false,
       shouldTransition: true
     };
@@ -38,21 +37,18 @@ class Graphic extends Component {
     }
 
     const id = detail.activated.config.id;
-    const isKnown = typeof detail.activated.config.known === 'boolean' ? 
-      detail.activated.config.known : false;
     const isEditable = typeof detail.activated.config.editable === 'boolean' ? 
       detail.activated.config.editable : false;
 
-    this.loadRow(id, isKnown, isEditable);
+    this.loadRow(id, isEditable);
   }
 
-  loadRow(id, isKnown, isEditable) {
+  loadRow(id, isEditable) {
     const groups = this.data[id] ? rowToGroups(this.data[id]) : this.state.groups;
 
     this.setState({
       id,
       groups,
-      isKnown,
       isEditable
     });
   }
@@ -60,20 +56,20 @@ class Graphic extends Component {
   editGroup(key, x, y) {   
     this.data[this.state.id][`x${key}`] = x;
     this.data[this.state.id][`y${key}`] = y;
-    this.loadRow(this.state.id, this.state.isKnown, this.state.isEditable);
+    this.loadRow(this.state.id, this.state.isEditable);
   }
 
   toggleTransitions(shouldTransition) {
     this.setState({shouldTransition});
   }
 
-  render({}, {groups, isKnown, isEditable, shouldTransition}) {
+  render({}, {groups, isEditable, shouldTransition}) {
     return (
       <Container>
         <Total
-          label={`of ${isKnown ? 'declared' : 'the total'} votes are ‘Yes’`}
+          label={`of the response is ‘Yes’`}
           groups={groups}
-          reducer={groupsToPct.bind(this, isKnown)}
+          reducer={groupsToPct}
           shouldTransition={shouldTransition} />
         <Chart
           groups={groups}
@@ -94,16 +90,10 @@ function rowToGroups(row) {
   ];
 }
 
-function groupsToPct(isKnown, groups) {
+function groupsToPct(groups) {
   return groups.length === 0 ? 0 :
-    groups.reduce((memo, group) => memo + group.p * group.x * group.y, 0) /
-    groups.reduce((memo, group) => memo + group.p * group.y, 0);
-}
-
-function groupsToPct(isKnown, groups) {
-  return groups.length === 0 ? 0 :
-    groups.reduce((memo, group) => memo + group.p * (1 - (isKnown ? group.u : 0)) * group.y * group.x / (1 - (isKnown ? group.u : 0)), 0) /
-    groups.reduce((memo, group) => memo + group.p * (1 - (isKnown ? group.u : 0)) * group.y, 0);
+    groups.reduce((memo, group) => memo + group.p * (1 - group.u) * group.y * group.x / (1 - group.u), 0) /
+    groups.reduce((memo, group) => memo + group.p * (1 - group.u) * group.y, 0);
 }
 
 module.exports = Graphic;
