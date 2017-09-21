@@ -37,34 +37,25 @@ injectGlobal`
 
   @media (min-width: 43.75rem) {
     align-items: center;
-    background-color: ${theme.greyLight};
   }
 
   & > * {
     margin: 2.75rem auto;
     width: 100%;
     max-width: 24.5rem;
-    background-color: ${theme.white};
-
-    @media (min-width: 43.75rem) {
-      box-shadow: 0 .5rem 1rem ${theme.grey};
-      border: 1px solid ${theme.grey};
-      border-radius: 2px;
-    }
   }
 }
 
-@media (min-width: 61.25rem) {
-  .Block.is-left .scrollyteller-stage > *,
-  .Block.is-right .scrollyteller-stage > * {
-    transition: transform .5s ${theme.bezier};
-  }
+.Block.is-piecemeal > .Block-content:last-child {
+  margin-bottom: 125vh;
+}
 
-  .Block.is-left .Block-media.is-fixed .scrollyteller-stage > * {
+@media (min-width: 61.25rem) {
+  .Block.is-left .scrollyteller-stage > * {
     transform: translate(18.125rem, 0);
   }
   
-  .Block.is-right .Block-media.is-fixed .scrollyteller-stage > * {
+  .Block.is-right .scrollyteller-stage > * {
     transform: translate(-18.125rem, 0);
   }
 
@@ -72,9 +63,17 @@ injectGlobal`
   .Block.is-right .Block-content::before {
     content: none;
   }
+
+  .Block.is-piecemeal {
+    & > .Block-content:nth-child(2) {
+      margin-top: calc(50vh - 16rem);
+    }
+
+    & > .Block-content:last-child {
+      margin-bottom: 75vh;
+    }
+  }
 }
 
-.Block.is-piecemeal > .Block-content:last-child {
-  margin-bottom: 125vh;
-}
+
 `;
