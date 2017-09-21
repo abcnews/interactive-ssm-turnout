@@ -39,7 +39,7 @@ const Value = styled.div`
 
   @media (max-height: 30rem) {
     display: inline-block;
-    width: 2.75rem;
+    width: 3.25rem;
     font-size: 1rem;
 
     & ~ * {
