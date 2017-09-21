@@ -19,6 +19,16 @@ const theme = module.exports.theme = {
 };
 
 injectGlobal`
+@media (min-width: 43.75rem) {
+  .Block {
+    background-color: transparent;
+
+    &.is-richtext {
+      background-color: transparent;
+    }
+  }
+}
+
 .scrollyteller-stage {
   display: flex;
   justify-content: center;
@@ -27,7 +37,7 @@ injectGlobal`
 
   @media (min-width: 43.75rem) {
     align-items: center;
-    background-color: ${theme.primary};
+    background-color: ${theme.greyLight};
   }
 
   & > * {
@@ -37,7 +47,9 @@ injectGlobal`
     background-color: ${theme.white};
 
     @media (min-width: 43.75rem) {
-      box-shadow: 0 .5rem 1rem ${theme.primaryDark};
+      box-shadow: 0 .5rem 1rem ${theme.grey};
+      border: 1px solid ${theme.grey};
+      border-radius: 2px;
     }
   }
 }
