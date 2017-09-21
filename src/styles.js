@@ -18,6 +18,9 @@ const theme = module.exports.theme = {
   bezier: 'cubic-bezier(0.42, 0, 0.58, 1)'
 };
 
+const graphicEstimatedHeight = 30; // rem
+const graphicCenterOffset = 18.125; // rem
+
 injectGlobal`
 @media (min-width: 43.75rem) {
   .Block {
@@ -51,12 +54,29 @@ injectGlobal`
 }
 
 @media (min-width: 61.25rem) {
-  .Block.is-left .scrollyteller-stage > * {
-    transform: translate(18.125rem, 0);
+  .Block .scrollyteller-stage > * {
+    transition: transform .75s ${theme.bezier};
   }
-  
+
+   .Block.is-left .scrollyteller-stage > * {
+    transform: translate(0, calc(-33.33vh + ${graphicEstimatedHeight / 3}rem));
+  }
+    
   .Block.is-right .scrollyteller-stage > * {
-    transform: translate(-18.125rem, 0);
+    transform: translate(0, calc(-33.33vh + ${graphicEstimatedHeight / 3}rem));
+  }
+
+  .Block.is-left .Block-media.is-fixed .scrollyteller-stage > * {
+    transform: translate(${graphicCenterOffset}rem, 0);
+  }
+    
+  .Block.is-right .Block-media.is-fixed .scrollyteller-stage > * {
+    transform: translate(-${graphicCenterOffset}rem, 0);
+  }
+
+  .Block.is-left .Block-media.is-beyond .scrollyteller-stage > *,
+  .Block.is-right .Block-media.is-beyond .scrollyteller-stage > * {
+    transform: none;
   }
 
   .Block.is-left .Block-content::before,
@@ -66,7 +86,7 @@ injectGlobal`
 
   .Block.is-piecemeal {
     & > .Block-content:nth-child(2) {
-      margin-top: calc(50vh - 16rem);
+      margin-top: 100vh;
     }
 
     & > .Block-content:last-child {
