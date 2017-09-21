@@ -255,7 +255,7 @@ const AxisName = styled.div`
 
 const Grid = styled.div`
   position: relative;
-  margin: 1rem 1.125rem 1.625rem 2.125rem;
+  margin: 1.25rem 1.125rem 1.625rem 2.125rem;
   border: .125rem solid ${props => props.theme.grey};
   border-top-width: 0;
   border-right-width: 0;
