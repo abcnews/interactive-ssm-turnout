@@ -19,6 +19,11 @@ class Chart extends Component {
     this.onDragEnd = this.onDragEnd.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.lastDemoGroup = this.props.isDemo && !nextProps.isDemo ?
+      this.props.groups[this.props.groups.length - 1] : null;
+  }
+
   componentWillUnmount() {
     if (!this.state.dragTargetKey) {
       return;
@@ -163,6 +168,7 @@ class Chart extends Component {
       groupPoints.push(
         <Point
           key={`group${group.key}Point`}
+          hasDelayedOpacityChange={isNonDemoGroupDuringDemo || isDemo && !isNonDemoGroupDuringDemo}
           isEditable={isEditable}
           isHidden={isNonDemoGroupDuringDemo}
           isInactive={isNonDragTargetDuringDrag}
@@ -198,7 +204,18 @@ class Chart extends Component {
       }
     });
 
-    legendItems.sort((a, b) => a.attributes.groupKey - b.attributes.groupKey);
+    if (this.lastDemoGroup) {
+      groupPoints.push(
+        <Point
+          key={`group${this.lastDemoGroup.key}Point`}
+          isHidden
+          shouldTransition
+          style={{bottom: `${this.lastDemoGroup.y * 100}%`, left: `${this.lastDemoGroup.x * 100}%`, zIndex: this.lastDemoGroup.key - 1}}
+        >
+          <Shape groupKey={this.lastDemoGroup.key}></Shape>
+        </Point>
+      );
+    }
 
     return (
       <Container>
@@ -223,7 +240,7 @@ module.exports = Chart;
 
 const transitionMixin = css`
   transition:
-    opacity .125s ${props => props.theme.bezier},
+    opacity .25s ${props => props.hasDelayedOpacityChange ? '.25s' : '0s'} ${props => props.theme.bezier},
     transform .5s ${props => props.theme.bezier},
     width .5s ${props => props.theme.bezier},
     height .5s ${props => props.theme.bezier},
@@ -232,7 +249,7 @@ const transitionMixin = css`
 `;
 
 const transitionMixinFn = props =>
-  props.shouldTransition ? transitionMixin : `transition: opacity .125s ${props.theme.bezier};`
+  props.shouldTransition ? transitionMixin : `transition: opacity .25s ${props.theme.bezier};`
 
 const dragHintKeyframes = keyframes`
   0%, 100% {
