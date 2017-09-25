@@ -15,6 +15,8 @@ const theme = module.exports.theme = {
   group2BG: '#D97D3F',
   group3FG: '#07856E',
   group3BG: '#40B8A3',
+  group4FG: '#2E3638', // Demo
+  group4BG: '#10414D', // Demo
   bezier: 'cubic-bezier(0.42, 0, 0.58, 1)'
 };
 

@@ -16,6 +16,7 @@ class Graphic extends Component {
     this.state = {
       id: null,
       groups: [],
+      isDemo: false,
       isEditable: false,
       shouldTransition: true
     };
@@ -36,11 +37,35 @@ class Graphic extends Component {
       return;
     }
 
+    const isDemo = typeof detail.activated.config.demo === 'boolean' ? 
+      detail.activated.config.demo : false;
+
+    if (isDemo) {
+      const u = String(detail.activated.config.u || 0);
+      const x = String(detail.activated.config.x || 0);
+      const y = String(detail.activated.config.y || 0);
+
+      return this.loadDemo(
+        parseFloat(u.replace('p', '.'), 10) / 100,
+        parseFloat(x.replace('p', '.'), 10) / 100,
+        parseFloat(y.replace('p', '.'), 10) / 100
+      );
+    }
+
     const id = detail.activated.config.id;
     const isEditable = typeof detail.activated.config.editable === 'boolean' ? 
       detail.activated.config.editable : false;
 
     this.loadRow(id, isEditable);
+  }
+
+  loadDemo(u, x, y) {
+    this.setState({
+      id: null,
+      groups: demoToGroups(u, x, y),
+      isDemo: true,
+      isEditable: false
+    });
   }
 
   loadRow(id, isEditable) {
@@ -49,6 +74,7 @@ class Graphic extends Component {
     this.setState({
       id,
       groups,
+      isDemo: false,
       isEditable
     });
   }
@@ -63,7 +89,7 @@ class Graphic extends Component {
     this.setState({shouldTransition});
   }
 
-  render({}, {groups, isEditable, shouldTransition}) {
+  render({}, {groups, isDemo, isEditable, shouldTransition}) {
     return (
       <Container>
         <Total
@@ -73,6 +99,7 @@ class Graphic extends Component {
           shouldTransition={shouldTransition} />
         <Chart
           groups={groups}
+          isDemo={isDemo}
           isEditable={isEditable}
           shouldTransition={shouldTransition}
           toggleTransitions={this.toggleTransitions}
@@ -80,6 +107,17 @@ class Graphic extends Component {
       </Container>
     );
   }
+}
+
+function demoToGroups(u, x, y) {
+  return rowToGroups({
+    p1: 1, p2: 1, p3: 1,
+    u1: u, u2: u, u3: u,
+    x1: x, x2: x, x3: x,
+    y1: y, y2: y, y3: y
+  }).concat([
+    {key: 4, name: 'All voters', p: 1, u: u, x, y}
+  ]);
 }
 
 function rowToGroups(row) {
