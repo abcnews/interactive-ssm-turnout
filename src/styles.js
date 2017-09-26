@@ -61,11 +61,11 @@ injectGlobal`
   }
 
    .Block.is-left .scrollyteller-stage > * {
-    transform: translate(0, calc(-33.33vh + ${graphicEstimatedHeight / 3}rem));
+    transform: translate(0, -33.33vh) translate(0, ${graphicEstimatedHeight / 3}rem);
   }
     
   .Block.is-right .scrollyteller-stage > * {
-    transform: translate(0, calc(-33.33vh + ${graphicEstimatedHeight / 3}rem));
+    transform: translate(0, -33.33vh) translate(0, ${graphicEstimatedHeight / 3}rem);
   }
 
   .Block.is-left .Block-media.is-fixed .scrollyteller-stage > * {
