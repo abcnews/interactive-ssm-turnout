@@ -253,10 +253,10 @@ const transitionMixinFn = props =>
 
 const dragHintKeyframes = keyframes`
   0%, 100% {
-    transform: translate(-50%, 50%) scale(.9);
+    transform: scale(.9);
   }
   50% {
-    transform: translate(-50%, 50%) scale(1.1);
+    transform: scale(1.1);
   }
 `;
 
@@ -353,6 +353,7 @@ const Point = styled.div`
 const DragHint = styled.div`
   opacity: ${props => props.isHidden ? 0 : 1};
 	position: absolute;
+  margin: 0 0 -1.875rem -1.875rem;
 	width: 3.75rem;
 	height: 3.75rem;
 	background-repeat: no-repeat;
