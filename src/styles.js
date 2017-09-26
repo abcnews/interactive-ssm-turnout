@@ -45,7 +45,8 @@ injectGlobal`
   }
 
   & > * {
-    margin: 2.75rem auto;
+    margin-top: 2.75rem;
+    margin-botom: 2.75rem;
     width: 100%;
     max-width: 24.5rem;
   }
