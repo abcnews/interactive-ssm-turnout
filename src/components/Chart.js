@@ -5,6 +5,13 @@ const hint = require('./hint.svg');
 
 const DEMO_GROUP = 4;
 
+const GROUP_SHAPE_SIZES = {
+  1: 1,
+  2: 0.9375,
+  3: 1.0624,
+  4: 1
+};
+
 class Chart extends Component {
   constructor({groups}) {
     super();
@@ -177,7 +184,7 @@ class Chart extends Component {
           onMouseDown={isEditable ? this.onDragStart.bind(this, group.key) : null}
           onTouchStart={isEditable ? this.onDragStart.bind(this, group.key) : null}
         >
-          <Shape groupKey={group.key}></Shape>
+          <Shape isDemo={isDemo} groupKey={group.key}></Shape>
         </Point>
       );
 
@@ -242,10 +249,10 @@ const transitionMixin = css`
   transition:
     opacity .25s ${props => props.hasDelayedOpacityChange ? '.25s' : '0s'} ${props => props.theme.bezier},
     transform .5s ${props => props.theme.bezier},
-    width .5s ${props => props.theme.bezier},
-    height .5s ${props => props.theme.bezier},
     left .5s ${props => props.theme.bezier},
-    bottom .5s ${props => props.theme.bezier};
+    bottom .5s ${props => props.theme.bezier},
+    width .5s ${props => props.theme.bezier},
+    height .5s ${props => props.theme.bezier};
 `;
 
 const transitionMixinFn = props =>
@@ -335,11 +342,26 @@ const Label = styled.div`
 
 const Shape = styled.div`
   transform: ${props => props.groupKey === 2 ? 'rotate(45deg)' : 'none'};
-  width: ${props => `${1 + ((props.groupKey === 4 ? 2 : props.groupKey) - 2) * .0625}rem`};
-  height: ${props => `${1 + ((props.groupKey === 4 ? 2 : props.groupKey) - 2) * .0625}rem`};
+  width: ${props => `${GROUP_SHAPE_SIZES[props.groupKey]}rem`};
+  height: ${props => `${GROUP_SHAPE_SIZES[props.groupKey]}rem`};
   background-color: ${props => props.groupKey ? props.theme[`group${props.groupKey}BG`] : props.theme.grey};
   border-radius: ${props => props.groupKey === 3 ? '50%' : '.125rem'};
   box-shadow: ${props => props.groupKey ? 'inset 0 0 0 .0625rem rgba(0, 0, 0, .1)' : 'none'};
+
+  ${props => props.groupKey === 4 ? `
+  &::before {
+    content: "";
+    transform: rotate(45deg) scale(${GROUP_SHAPE_SIZES[2]});
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    background-color: inherit;
+    border-radius: inherit;
+    box-shadow: none;
+  }
+  ` : ''}
 `;
 
 const Point = styled.div`
@@ -370,6 +392,7 @@ const Legend = styled.div`
 
 const LegendItem = styled.div`
   display: inline-block;
+  position: relative;
   opacity: ${props => props.isInactive ? .5 : 1};
   color: ${props => props.groupKey ? props.theme[`group${props.groupKey}FG`] : 'inherit'};
   transition: opacity .125s ${props => props.theme.bezier};
@@ -380,7 +403,7 @@ const LegendItem = styled.div`
 
   & > * {
     display: inline-block;
-    margin-right: ${props => props.groupKey === 2 ? '.325rem' : '.25rem'};
+    margin-right: ${props => props.groupKey % 2 === 0 ? '.325rem' : '.25rem'};
     font-size: .75rem;
     vertical-align: middle;
   }
