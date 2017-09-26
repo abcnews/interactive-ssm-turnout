@@ -61,10 +61,7 @@ injectGlobal`
     transition: transform .75s ${theme.bezier};
   }
 
-   .Block.is-left .scrollyteller-stage > * {
-    transform: translate(0, -33.33vh) translate(0, ${graphicEstimatedHeight / 3}rem);
-  }
-    
+  .Block.is-left .scrollyteller-stage > *,
   .Block.is-right .scrollyteller-stage > * {
     transform: translate(0, -33.33vh) translate(0, ${graphicEstimatedHeight / 3}rem);
   }
@@ -79,7 +76,7 @@ injectGlobal`
 
   .Block.is-left .Block-media.is-beyond .scrollyteller-stage > *,
   .Block.is-right .Block-media.is-beyond .scrollyteller-stage > * {
-    transform: none;
+    transform: translate(0, 33.33vh) translate(0, ${graphicEstimatedHeight / -3}rem);
   }
 
   .Block.is-left .Block-content::before,
