@@ -81,17 +81,7 @@ injectGlobal`
 
   .Block.is-left .Block-content::before,
   .Block.is-right .Block-content::before {
-    content: none;
-  }
-
-  .Block.is-piecemeal {
-    & > .Block-content:nth-child(2) {
-      margin-top: 100vh;
-    }
-
-    & > .Block-content:last-child {
-      margin-bottom: 75vh;
-    }
+    background-color: rgba(249, 249, 249, 0.9);
   }
 }
 
