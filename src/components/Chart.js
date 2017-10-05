@@ -241,7 +241,7 @@ class Chart extends Component {
 
     return (
       <Container>
-        <AxisName axis="x">Per cent of voter turnout</AxisName>
+        <AxisName axis="x">Voter turnout</AxisName>
         <Grid>
           <div>{midGridines.concat(extentLabels)}</div>
           <div>{groupGridlines}</div>
@@ -249,7 +249,7 @@ class Chart extends Component {
           <div>{groupPoints}</div>
           <div>{groupLabels}</div>
         </Grid>
-        <AxisName axis="y">Per cent of ‘Yes’ response</AxisName>
+        <AxisName axis="y">‘Yes’ vote</AxisName>
         <Legend>{legendItems}</Legend>
       </Container>
     );
