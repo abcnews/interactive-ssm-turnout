@@ -398,7 +398,10 @@ const DragHint = styled.div`
   pointer-events: none;
 `;
 
-const Legend = styled.div`margin: 1rem 0 0 2.125rem;`;
+const Legend = styled.div`
+  margin: 1rem 0 0;
+  text-align: center;
+`;
 
 const LegendItem = styled.div`
   display: inline-block;
