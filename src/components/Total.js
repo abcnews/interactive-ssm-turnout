@@ -15,7 +15,8 @@ function Total({ label, groups, reducer, shouldTransition }) {
   return (
     <Container>
       <Value>
-        <CountTo from={previousValue * 100} to={value * 100} speed={shouldTransition ? 500 : 0} />%
+        <CountTo from={previousValue * 100} to={value * 100} speed={shouldTransition ? 500 : 0} />
+        <sup>%</sup>
       </Value>
       {label}
       <Bar value={value} shouldTransition={shouldTransition} />
@@ -36,6 +37,10 @@ const Value = styled.div`
   font-family: ${props => props.theme.fontSerif};
   font-weight: bold;
   line-height: 1;
+
+  > sup {
+    font-size: 66.67%;
+  }
 
   @media (max-height: 30rem) {
     display: inline-block;
