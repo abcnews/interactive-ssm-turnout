@@ -1,6 +1,6 @@
-const {h, Component} = require('preact');
+const { h, Component } = require('preact');
 const styled = require('styled-components').default;
-const {css, keyframes} = require('styled-components');
+const { css, keyframes } = require('styled-components');
 const hint = require('./hint.svg');
 
 const DEMO_GROUP = 4;
@@ -13,9 +13,9 @@ const GROUP_SHAPE_SIZES = {
 };
 
 class Chart extends Component {
-  constructor({groups}) {
+  constructor({ groups }) {
     super();
-    
+
     this.state = {
       zOrder: groups.map(group => group.key)
     };
@@ -27,8 +27,8 @@ class Chart extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.lastDemoGroup = this.props.isDemo && !nextProps.isDemo ?
-      this.props.groups[this.props.groups.length - 1] : null;
+    this.lastDemoGroup =
+      this.props.isDemo && !nextProps.isDemo ? this.props.groups[this.props.groups.length - 1] : null;
   }
 
   componentWillUnmount() {
@@ -69,7 +69,7 @@ class Chart extends Component {
     document.addEventListener('touchcancel', this.onDragEnd);
 
     this.gridRect = this.base.querySelector(`.${Grid.styledComponentId}`).getBoundingClientRect();
-    
+
     this.setState({
       dragTargetKey: key,
       zOrder
@@ -79,7 +79,7 @@ class Chart extends Component {
   }
 
   onDrag(event) {
-    const {x, y} = this.translatePointerToValue(event.touches ? event.touches[0] : event);
+    const { x, y } = this.translatePointerToValue(event.touches ? event.touches[0] : event);
 
     this.props.editGroup(this.state.dragTargetKey, x, y);
   }
@@ -100,23 +100,29 @@ class Chart extends Component {
     this.props.toggleTransitions(true);
   }
 
-  render({groups, isDemo, isEditable, shouldTransition}, {dragTargetKey, zOrder}) {
+  render({ groups, isDemo, isEditable, shouldTransition }, { dragTargetKey, zOrder }) {
     relaxLabels(groups, isDemo);
-    
+
     const minXLabel = Math.min.apply(Math, groups.map(group => group.xLabel));
     const maxXLabel = Math.max.apply(Math, groups.map(group => group.xLabel));
     const minYLabel = Math.min.apply(Math, groups.map(group => group.yLabel));
     const maxYLabel = Math.max.apply(Math, groups.map(group => group.yLabel));
 
     const midGridines = [
-      <Gridline axis="x" style={{left: '50%', height: '100%'}}></Gridline>,
-      <Gridline axis="y" style={{bottom: '50%', width: '100%'}}></Gridline>
+      <Gridline axis="x" style={{ left: '50%', height: '100%' }} />,
+      <Gridline axis="y" style={{ bottom: '50%', width: '100%' }} />
     ];
 
     const extentLabels = [
-      <Label extent="min" isHidden={minXLabel < .01 || minYLabel < .01}>0%</Label>,
-      <Label extent="max" axis="x" isHidden={maxXLabel > .9}>100%</Label>,
-      <Label extent="max" axis="y" isHidden={maxYLabel > .94}>100%</Label>
+      <Label extent="min" isHidden={minXLabel < 0.01 || minYLabel < 0.01}>
+        0%
+      </Label>,
+      <Label extent="max" axis="x" isHidden={maxXLabel > 0.9}>
+        100%
+      </Label>,
+      <Label extent="max" axis="y" isHidden={maxYLabel > 0.94}>
+        100%
+      </Label>
     ];
 
     const groupGridlines = [];
@@ -137,8 +143,8 @@ class Chart extends Component {
           isHidden={isNonDemoGroupDuringDemo}
           isInactive={isNonDragTargetDuringDrag}
           shouldTransition={shouldTransition}
-          style={{left: `${group.x * 100}%`, height: `${group.y * 100}%`}}
-        ></Gridline>,
+          style={{ left: `${group.x * 100}%`, height: `${group.y * 100}%` }}
+        />,
         <Gridline
           key={`group${group.key}YGridline`}
           axis="y"
@@ -146,8 +152,8 @@ class Chart extends Component {
           isHidden={isNonDemoGroupDuringDemo}
           isInactive={isNonDragTargetDuringDrag}
           shouldTransition={shouldTransition}
-          style={{bottom: `${group.y * 100}%`, width: `${group.x * 100}%`}}
-        ></Gridline>
+          style={{ bottom: `${group.y * 100}%`, width: `${group.x * 100}%` }}
+        />
       );
 
       groupLabels.push(
@@ -158,33 +164,41 @@ class Chart extends Component {
           isHidden={isNonDemoGroupDuringDemo}
           isInactive={isNonDragTargetDuringDrag}
           shouldTransition={shouldTransition}
-          style={{left: `${group.xLabel * 100}%`}}
+          style={{ left: `${group.xLabel * 100}%` }}
           data-text={`${Math.round(group.x * 100)}%`}
-        >{Math.round(group.x * 100)}%</Label>,
+        >
+          {Math.round(group.x * 100)}%
+        </Label>,
         <Label
           key={`group${group.key}YLabel`}
           axis="y"
           groupKey={group.key}
           shouldTransition={shouldTransition}
           isInactive={isNonDragTargetDuringDrag}
-          style={{bottom: `${group.yLabel * 100}%`}}
+          style={{ bottom: `${group.yLabel * 100}%` }}
           data-text={`${Math.round(group.y * 100)}%`}
-        >{Math.round(group.y * 100)}%</Label>
+        >
+          {Math.round(group.y * 100)}%
+        </Label>
       );
 
       groupPoints.push(
         <Point
           key={`group${group.key}Point`}
-          hasDelayedOpacityChange={isNonDemoGroupDuringDemo || isDemo && !isNonDemoGroupDuringDemo}
+          hasDelayedOpacityChange={isNonDemoGroupDuringDemo || (isDemo && !isNonDemoGroupDuringDemo)}
           isEditable={isEditable}
           isHidden={isNonDemoGroupDuringDemo}
           isInactive={isNonDragTargetDuringDrag}
           shouldTransition={shouldTransition}
-          style={{bottom: `${group.y * 100}%`, left: `${group.x * 100}%`, zIndex: group.key in zOrder ? zOrder.indexOf(group.key) : group.key - 1}}
+          style={{
+            bottom: `${group.y * 100}%`,
+            left: `${group.x * 100}%`,
+            zIndex: group.key in zOrder ? zOrder.indexOf(group.key) : group.key - 1
+          }}
           onMouseDown={isEditable ? this.onDragStart.bind(this, group.key) : null}
           onTouchStart={isEditable ? this.onDragStart.bind(this, group.key) : null}
         >
-          <Shape isDemo={isDemo} groupKey={group.key}></Shape>
+          <Shape isDemo={isDemo} groupKey={group.key} />
         </Point>
       );
 
@@ -193,18 +207,15 @@ class Chart extends Component {
           <DragHint
             isHidden={!isEditable}
             shouldTransition={shouldTransition}
-            style={{bottom: `${group.y * 100}%`, left: `${group.x * 100}%`}}
-          ></DragHint>
+            style={{ bottom: `${group.y * 100}%`, left: `${group.x * 100}%` }}
+          />
         );
       }
 
       if (!isDemo || group.key === DEMO_GROUP) {
         legendItems.push(
-          <LegendItem
-            groupKey={group.key}
-            isInactive={isNonDragTargetDuringDrag}
-          >
-            <Shape groupKey={group.key}></Shape>
+          <LegendItem groupKey={group.key} isInactive={isNonDragTargetDuringDrag}>
+            <Shape groupKey={group.key} />
             <div>{group.name}</div>
           </LegendItem>
         );
@@ -217,16 +228,20 @@ class Chart extends Component {
           key={`group${this.lastDemoGroup.key}Point`}
           isHidden
           shouldTransition
-          style={{bottom: `${this.lastDemoGroup.y * 100}%`, left: `${this.lastDemoGroup.x * 100}%`, zIndex: this.lastDemoGroup.key - 1}}
+          style={{
+            bottom: `${this.lastDemoGroup.y * 100}%`,
+            left: `${this.lastDemoGroup.x * 100}%`,
+            zIndex: this.lastDemoGroup.key - 1
+          }}
         >
-          <Shape groupKey={this.lastDemoGroup.key}></Shape>
+          <Shape groupKey={this.lastDemoGroup.key} />
         </Point>
       );
     }
 
     return (
       <Container>
-        <AxisName axis="x">Percent of voter turnout</AxisName>
+        <AxisName axis="x">Per cent of voter turnout</AxisName>
         <Grid>
           <div>{midGridines.concat(extentLabels)}</div>
           <div>{groupGridlines}</div>
@@ -234,10 +249,8 @@ class Chart extends Component {
           <div>{groupPoints}</div>
           <div>{groupLabels}</div>
         </Grid>
-        <AxisName axis="y">Percent of ‘Yes’ votes</AxisName>
-        <Legend>
-          {legendItems}
-        </Legend>
+        <AxisName axis="y">Per cent of ‘Yes’ response</AxisName>
+        <Legend>{legendItems}</Legend>
       </Container>
     );
   }
@@ -246,17 +259,14 @@ class Chart extends Component {
 module.exports = Chart;
 
 const transitionMixin = css`
-  transition:
-    opacity .25s ${props => props.hasDelayedOpacityChange ? '.25s' : '0s'} ${props => props.theme.bezier},
-    transform .5s ${props => props.theme.bezier},
-    left .5s ${props => props.theme.bezier},
-    bottom .5s ${props => props.theme.bezier},
-    width .5s ${props => props.theme.bezier},
-    height .5s ${props => props.theme.bezier};
+  transition: opacity 0.25s ${props => (props.hasDelayedOpacityChange ? '.25s' : '0s')} ${props => props.theme.bezier},
+    transform 0.5s ${props => props.theme.bezier}, left 0.5s ${props => props.theme.bezier},
+    bottom 0.5s ${props => props.theme.bezier}, width 0.5s ${props => props.theme.bezier},
+    height 0.5s ${props => props.theme.bezier};
 `;
 
 const transitionMixinFn = props =>
-  props.shouldTransition ? transitionMixin : `transition: opacity .25s ${props.theme.bezier};`
+  props.shouldTransition ? transitionMixin : `transition: opacity .25s ${props.theme.bezier};`;
 
 const dragHintKeyframes = keyframes`
   0%, 100% {
@@ -276,8 +286,8 @@ const Container = styled.div`
 
 const AxisName = styled.div`
   font-weight: bold;
-  max-width: ${props => props.axis === 'x' ? '6rem' : 'none'};
-  text-align: ${props => props.axis === 'x' ? 'left' : 'center'};
+  max-width: ${props => (props.axis === 'x' ? '6rem' : 'none')};
+  text-align: ${props => (props.axis === 'x' ? 'left' : 'center')};
 
   @media (max-height: 30rem) {
     max-width: none;
@@ -288,12 +298,12 @@ const AxisName = styled.div`
 const Grid = styled.div`
   position: relative;
   margin: 1.25rem 1.125rem 1.625rem 2.125rem;
-  border: .125rem solid ${props => props.theme.grey};
+  border: 0.125rem solid ${props => props.theme.grey};
   border-top-width: 0;
   border-right-width: 0;
   padding-top: 60%;
   height: 0;
-  font-size: .75rem;
+  font-size: 0.75rem;
 
   @media (max-height: 30rem) {
     padding-top: 30%;
@@ -301,32 +311,33 @@ const Grid = styled.div`
 `;
 
 const Gridline = styled.div`
-  opacity: ${props => props.isInactive || props.isHidden ? 0 : .3};
-  transform: ${props => props.axis === 'x' ? 'translate(-50%, 0)' : 'translate(0, 50%)'};
+  opacity: ${props => (props.isInactive || props.isHidden ? 0 : 0.3)};
+  transform: ${props => (props.axis === 'x' ? 'translate(-50%, 0)' : 'translate(0, 50%)')};
   position: absolute;
-  bottom: ${props => props.axis === 'x' ? '0' : 'auto'};
-  left: ${props => props.axis === 'y' ? '0' : 'auto'};
-  width: .125rem;
-  height: .125rem;
-  background: ${props => props.groupKey != null ? props.theme[`group${props.groupKey}BG`] : props.theme.grey};
-  ${transitionMixinFn}
+  bottom: ${props => (props.axis === 'x' ? '0' : 'auto')};
+  left: ${props => (props.axis === 'y' ? '0' : 'auto')};
+  width: 0.125rem;
+  height: 0.125rem;
+  background: ${props => (props.groupKey != null ? props.theme[`group${props.groupKey}BG`] : props.theme.grey)};
+  ${transitionMixinFn};
 `;
 
 const Label = styled.div`
-  opacity: ${props => props.isHidden ? 0 : props.isInactive ? .5 : 1};
-  transform: translate(${props => props.axis ==='x' ? '-50%' : '-.375rem'}, ${props => props.axis ==='y' ? '50%' : '.375rem'});
+  opacity: ${props => (props.isHidden ? 0 : props.isInactive ? 0.5 : 1)};
+  transform: translate(
+    ${props => (props.axis === 'x' ? '-50%' : '-.375rem')},
+    ${props => (props.axis === 'y' ? '50%' : '.375rem')}
+  );
   position: absolute;
-  top: ${props => props.axis !== 'y' ? '100%' : 'auto'};
-  right: ${props => props.axis !== 'x' ? '100%' : 'auto'};
-  bottom: ${props => props.axis === 'y' && props.extent === 'max' ? '100%' : 'auto'};
-  left: ${props => props.axis === 'x' && props.extent === 'max' ? '100%' : 'auto'};
-  z-index: ${props => props.groupKey ? 5 : 'auto'};
-  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}FG`] : 'inherit'};
-  font-weight: ${props => props.extent ? 'normal' : 'bold'};
+  top: ${props => (props.axis !== 'y' ? '100%' : 'auto')};
+  right: ${props => (props.axis !== 'x' ? '100%' : 'auto')};
+  bottom: ${props => (props.axis === 'y' && props.extent === 'max' ? '100%' : 'auto')};
+  left: ${props => (props.axis === 'x' && props.extent === 'max' ? '100%' : 'auto')};
+  z-index: ${props => (props.groupKey ? 5 : 'auto')};
+  color: ${props => (props.groupKey ? props.theme[`group${props.groupKey}FG`] : 'inherit')};
+  font-weight: ${props => (props.extent ? 'normal' : 'bold')};
   pointer-events: none;
-  ${transitionMixinFn}
-
-  @supports (-webkit-text-stroke-width: 0) or (-moz-text-stroke-width: 0) {
+  ${transitionMixinFn} @supports (-webkit-text-stroke-width: 0) or (-moz-text-stroke-width: 0) {
     &::before {
       content: attr(data-text);
       position: absolute;
@@ -334,21 +345,23 @@ const Label = styled.div`
       z-index: -1;
       -webkit-text-stroke-color: #fff;
       -moz-text-stroke-color: #fff;
-      -webkit-text-stroke-width: .125rem;
-      -moz-text-stroke-width: .125rem;
+      -webkit-text-stroke-width: 0.125rem;
+      -moz-text-stroke-width: 0.125rem;
     }
   }
 `;
 
 const Shape = styled.div`
-  transform: ${props => props.groupKey === 2 ? 'rotate(45deg)' : 'none'};
+  transform: ${props => (props.groupKey === 2 ? 'rotate(45deg)' : 'none')};
   width: ${props => `${GROUP_SHAPE_SIZES[props.groupKey]}rem`};
   height: ${props => `${GROUP_SHAPE_SIZES[props.groupKey]}rem`};
-  background-color: ${props => props.groupKey ? props.theme[`group${props.groupKey}BG`] : props.theme.grey};
-  border-radius: ${props => props.groupKey === 3 ? '50%' : '.125rem'};
-  box-shadow: ${props => props.groupKey ? 'inset 0 0 0 .0625rem rgba(0, 0, 0, .1)' : 'none'};
+  background-color: ${props => (props.groupKey ? props.theme[`group${props.groupKey}BG`] : props.theme.grey)};
+  border-radius: ${props => (props.groupKey === 3 ? '50%' : '.125rem')};
+  box-shadow: ${props => (props.groupKey ? 'inset 0 0 0 .0625rem rgba(0, 0, 0, .1)' : 'none')};
 
-  ${props => props.groupKey === 4 ? `
+  ${props =>
+    props.groupKey === 4
+      ? `
   &::before {
     content: "";
     transform: rotate(45deg) scale(${GROUP_SHAPE_SIZES[2]});
@@ -361,57 +374,54 @@ const Shape = styled.div`
     border-radius: inherit;
     box-shadow: none;
   }
-  ` : ''}
+  `
+      : ''};
 `;
 
 const Point = styled.div`
-  opacity: ${props => props.isHidden ? 0 : props.isInactive ? .5 : 1};
+  opacity: ${props => (props.isHidden ? 0 : props.isInactive ? 0.5 : 1)};
   transform: ${props => `translate(-50%, 50%)${props.isEditable ? ' scale(2)' : ''}`};
   position: absolute;
-  ${transitionMixinFn}
-  cursor: ${props => props.isEditable ? 'pointer' : 'default'};
+  ${transitionMixinFn} cursor: ${props => (props.isEditable ? 'pointer' : 'default')};
 `;
 
 const DragHint = styled.div`
-  opacity: ${props => props.isHidden ? 0 : 1};
-	position: absolute;
+  opacity: ${props => (props.isHidden ? 0 : 1)};
+  position: absolute;
   margin: 0 0 -1.875rem -1.875rem;
-	width: 3.75rem;
-	height: 3.75rem;
-	background-repeat: no-repeat;
-	background-size: 100%;
-	background-image: url(${hint});
-  ${transitionMixinFn}
-	animation: 1.25s ${dragHintKeyframes} infinite;
-	pointer-events: none;
+  width: 3.75rem;
+  height: 3.75rem;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-image: url(${hint});
+  ${transitionMixinFn} animation: 1.25s ${dragHintKeyframes} infinite;
+  pointer-events: none;
 `;
 
-const Legend = styled.div`
-  margin: 1rem 0 0 2.125rem;
-`;
+const Legend = styled.div`margin: 1rem 0 0 2.125rem;`;
 
 const LegendItem = styled.div`
   display: inline-block;
   position: relative;
-  opacity: ${props => props.isInactive ? .5 : 1};
-  color: ${props => props.groupKey ? props.theme[`group${props.groupKey}FG`] : 'inherit'};
-  transition: opacity .125s ${props => props.theme.bezier};
+  opacity: ${props => (props.isInactive ? 0.5 : 1)};
+  color: ${props => (props.groupKey ? props.theme[`group${props.groupKey}FG`] : 'inherit')};
+  transition: opacity 0.125s ${props => props.theme.bezier};
 
   &:not(:first-child) {
-    margin-left: .75rem;
+    margin-left: 0.75rem;
   }
 
   & > * {
     display: inline-block;
-    margin-right: ${props => props.groupKey % 2 === 0 ? '.325rem' : '.25rem'};
-    font-size: .75rem;
+    margin-right: ${props => (props.groupKey % 2 === 0 ? '.325rem' : '.25rem')};
+    font-size: 0.75rem;
     vertical-align: middle;
   }
 `;
 
 function relaxLabels(groups, isDemo) {
   const maxIterations = 10;
-  const shift = .005;
+  const shift = 0.005;
 
   groups.forEach(group => {
     group.xLabel = group.x;
@@ -436,7 +446,7 @@ function relaxLabels(groups, isDemo) {
         const diffY = aY - bY;
         const xChars = (String(Math.round(aX * 100)) + String(Math.round(bX * 100))).length + 2;
 
-        if (Math.abs(diffX) < xChars * .0155) {
+        if (Math.abs(diffX) < xChars * 0.0155) {
           const signX = diffX > 0 ? 1 : -1;
 
           a.xLabel = aX + signX * shift;
@@ -445,7 +455,7 @@ function relaxLabels(groups, isDemo) {
           shouldIterate = true;
         }
 
-        if (Math.abs(diffY) < .05) {
+        if (Math.abs(diffY) < 0.05) {
           const signY = diffY > 0 ? 1 : -1;
 
           a.yLabel = aY + signY * shift;
