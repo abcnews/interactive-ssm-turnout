@@ -1,6 +1,8 @@
 # interactive-ssm-turnout
 
-A project generated from [aunty](https://github.com/abcnews/aunty)'s `preact-app` template.
+Calculator: What will the same-sex marriage result be?
+
+Story: [http://www.abc.net.au/news/2017-10-06/same-sex-marriage-result-calculator/8856294](http://www.abc.net.au/news/2017-10-06/same-sex-marriage-result-calculator/8856294)
 
 ## Authors
 
