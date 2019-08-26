@@ -1,7 +1,7 @@
-const {csv} = require('d3-request');
-const {h, render} = require('preact');
-const {ThemeProvider} = require('styled-components');
-const {theme} = require('./styles');
+const { csv } = require('d3-request');
+const { h, render } = require('preact');
+const { ThemeProvider } = require('styled-components');
+const { theme } = require('./styles');
 
 const root = document.querySelector('[data-interactive-ssm-turnout-root]');
 
@@ -51,8 +51,4 @@ if (module.hot) {
       render(<ErrorBox error={err} />, root, root.firstChild);
     }
   });
-}
-
-if (process.env.NODE_ENV === 'development') {
-  require('preact/devtools');
 }

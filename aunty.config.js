@@ -1,5 +1,5 @@
 module.exports = {
-  type: 'preact-app',
+  type: 'preact',
   babel: config => {
     if (!config.plugins) {
       config.plugins = [];
@@ -14,4 +14,4 @@ module.exports = {
 
     return config;
   }
-}
+};
