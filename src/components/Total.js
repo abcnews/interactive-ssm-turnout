@@ -1,30 +1,9 @@
-const { h } = require('preact');
-const styled = require('styled-components').default;
-const CountTo = require('react-count-to').default;
-const Bar = require('./Bar');
+import React from 'react';
+import styled from 'styled-components';
+import Bar from './Bar';
 
 const MIN = 0;
 const MAX = 1;
-
-function Total({ label, groups, reducer, shouldTransition }) {
-  const value = Math.min(MAX, Math.max(MIN, reducer(groups))) || 0;
-  const previousValue = this._cachedValue || value;
-
-  this._cachedValue = value;
-
-  return (
-    <Container>
-      <Value>
-        <CountTo from={previousValue * 100} to={value * 100} speed={shouldTransition ? 500 : 0} />
-        <sup>%</sup>
-      </Value>
-      {label}
-      <Bar value={value} shouldTransition={shouldTransition} />
-    </Container>
-  );
-}
-
-module.exports = Total;
 
 const Container = styled.div`
   position: relative;
@@ -32,9 +11,9 @@ const Container = styled.div`
 `;
 
 const Value = styled.div`
-  color: ${props => props.theme.primary};
+  color: ${(props) => props.theme.primary};
   font-size: 2.5rem;
-  font-family: ${props => props.theme.fontSerif};
+  font-family: ${(props) => props.theme.fontSerif};
   font-weight: bold;
   line-height: 1;
 
@@ -52,3 +31,20 @@ const Value = styled.div`
     }
   }
 `;
+
+function Total({ label, groups, reducer, shouldTransition }) {
+  const value = Math.min(MAX, Math.max(MIN, reducer(groups))) || 0;
+
+  return (
+    <Container>
+      <Value>
+        <span>{Math.floor(value * 100)}</span>
+        <sup>%</sup>
+      </Value>
+      {label}
+      <Bar value={value} shouldTransition={shouldTransition} />
+    </Container>
+  );
+}
+
+export default Total;

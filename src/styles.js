@@ -1,6 +1,6 @@
-const {injectGlobal} = require('styled-components');
+import { injectGlobal } from 'styled-components';
 
-const theme = module.exports.theme = {
+export const theme = {
   fontSans: 'ABCSans, sans-serif',
   fontSerif: 'ABCSerif, serif',
   text: '#5C6C70',
@@ -17,15 +17,12 @@ const theme = module.exports.theme = {
   group3BG: '#40B8A3',
   group4FG: '#2E3638', // Demo
   group4BG: '#10414D', // Demo
-  bezier: 'cubic-bezier(0.42, 0, 0.58, 1)'
+  bezier: 'cubic-bezier(0.42, 0, 0.58, 1)',
 };
-
-const graphicEstimatedHeight = 30; // rem
-const graphicCenterOffset = 18.125; // rem
 
 injectGlobal`
 @media (min-width: 43.75rem) {
-  .Block {
+  [id^="scrollyteller"] {
     background-color: transparent;
 
     &.is-richtext {
@@ -34,7 +31,7 @@ injectGlobal`
   }
 }
 
-.scrollyteller-stage {
+[id^="scrollyteller"] > div > div:first-child {
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -46,44 +43,21 @@ injectGlobal`
 
   & > * {
     margin-top: 2.75rem;
-    margin-botom: 2.75rem;
+    margin-bottom: 2.75rem;
     width: 100%;
     max-width: 24.5rem;
   }
 }
 
-.Block.is-piecemeal > .Block-content:last-child {
+[id^="scrollyteller"] > div > div:last-child {
   margin-bottom: 125vh;
 }
 
-@media (min-width: 61.25rem) {
-  .Block .scrollyteller-stage > * {
-    transition: transform .75s ${theme.bezier};
-  }
-
-  .Block.is-left .scrollyteller-stage > *,
-  .Block.is-right .scrollyteller-stage > * {
-    transform: translate(0, -33.33vh) translate(0, ${graphicEstimatedHeight / 3}rem);
-  }
-
-  .Block.is-left .Block-media.is-fixed .scrollyteller-stage > * {
-    transform: translate(${graphicCenterOffset}rem, 0);
-  }
-    
-  .Block.is-right .Block-media.is-fixed .scrollyteller-stage > * {
-    transform: translate(-${graphicCenterOffset}rem, 0);
-  }
-
-  .Block.is-left .Block-media.is-beyond .scrollyteller-stage > *,
-  .Block.is-right .Block-media.is-beyond .scrollyteller-stage > * {
-    transform: translate(0, 33.33vh) translate(0, ${graphicEstimatedHeight / -3}rem);
-  }
-
-  .Block.is-left .Block-content::before,
-  .Block.is-right .Block-content::before {
-    background-color: rgba(249, 249, 249, 0.9);
-  }
+[id^="scrollyteller"] > div > div:first-child ~ div::before {
+  background-color: rgba(249, 249, 249, 0.9);
 }
 
-
+[id^="scrollyteller"] > div > div:first-child ~ div p {
+  color: #111;
+}
 `;

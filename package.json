@@ -1,7 +1,7 @@
 {
   "name": "interactive-ssm-turnout",
   "version": "1.11.1",
-  "description": "A project generated from aunty's preact-app template.",
+  "description": "A project generated from aunty's preact template.",
   "license": "MIT",
   "private": true,
   "contributors": [
@@ -11,14 +11,15 @@
     "start": "aunty serve"
   },
   "devDependencies": {
-    "@abcnews/aunty": "^10.5.2",
+    "@abcnews/aunty": "^13.2.2",
     "babel-plugin-styled-components": "^1.10.6"
   },
   "dependencies": {
+    "@abcnews/env-utils": "^3.1.0",
+    "@abcnews/scrollyteller": "^4.1.1",
     "d3-request": "^1.0.6",
-    "preact": "^8.5.2",
-    "preact-compat": "^3.19.0",
-    "react-count-to": "^0.8.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "styled-components": "^2.1.2"
   }
 }

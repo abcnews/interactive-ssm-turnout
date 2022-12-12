@@ -1,54 +1,38 @@
-const { csv } = require('d3-request');
-const { h, render } = require('preact');
-const { ThemeProvider } = require('styled-components');
-const { theme } = require('./styles');
+import { whenOdysseyLoaded } from '@abcnews/env-utils';
+import { loadScrollyteller } from '@abcnews/scrollyteller';
+import { csv } from 'd3-request';
+import React from 'react';
+import { render } from 'react-dom';
+import { ThemeProvider } from 'styled-components';
+import Graphic from './components/Graphic';
+import { theme } from './styles';
 
-const root = document.querySelector('[data-interactive-ssm-turnout-root]');
+const DATA_URL = `${__webpack_public_path__}data.csv`;
 
-function init() {
-  const Graphic = require('./components/Graphic');
+const getData = () =>
+  new Promise((resolve, reject) => {
+    csv(DATA_URL, (error, data) => {
+      if (error) {
+        return reject(error);
+      }
 
-  const stage = document.querySelector('.scrollyteller-stage');
+      resolve(
+        data.reduce((memo, row) => {
+          memo[row.id] = row;
 
-  if (stage === null) {
-    return setTimeout(init, 100);
-  }
-
-  if (root.parentElement !== stage) {
-    stage.appendChild(root);
-  }
-
-  csv(root.dataset.data, (err, data) => {
-    if (err) {
-      throw err;
-    }
-
-    data = data.reduce((memo, row) => {
-      memo[row.id] = row;
-
-      return memo;
-    }, {});
-
-    render(
-      <ThemeProvider theme={theme}>
-        <Graphic data={data} scrollyteller={stage.__SCROLLYTELLER__} />
-      </ThemeProvider>,
-      root,
-      root.firstChild
-    );
+          return memo;
+        }, {})
+      );
+    });
   });
-}
 
-init();
+Promise.all([getData(), whenOdysseyLoaded]).then(([data]) => {
+  const scrollyData = loadScrollyteller('', 'u-full');
 
-if (module.hot) {
-  module.hot.accept('./components/Graphic', () => {
-    try {
-      init();
-    } catch (err) {
-      const ErrorBox = require('./components/ErrorBox');
-
-      render(<ErrorBox error={err} />, root, root.firstChild);
-    }
-  });
-}
+  render(
+    <ThemeProvider theme={theme}>
+      <Graphic data={data} scrollyData={scrollyData} />
+    </ThemeProvider>,
+    scrollyData.mountNode
+  );
+});
