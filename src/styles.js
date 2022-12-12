@@ -20,18 +20,17 @@ export const theme = {
   bezier: 'cubic-bezier(0.42, 0, 0.58, 1)',
 };
 
-injectGlobal`
-@media (min-width: 43.75rem) {
-  [id^="scrollyteller"] {
-    background-color: transparent;
+const SCROLLYTELLER_SELECTOR = `[id^="scrollyteller"]`;
+const MEDIA_SELECTOR = `${SCROLLYTELLER_SELECTOR} > div > div:first-child`;
+const CONTENT_SELECTOR = `${MEDIA_SELECTOR} ~ div`;
 
-    &.is-richtext {
-      background-color: transparent;
-    }
-  }
+injectGlobal`
+${SCROLLYTELLER_SELECTOR} {
+  --color-panel-text: #111;
+  background-color: transparent;
 }
 
-[id^="scrollyteller"] > div > div:first-child {
+${MEDIA_SELECTOR} {
   display: flex;
   justify-content: center;
   align-items: stretch;
@@ -49,15 +48,15 @@ injectGlobal`
   }
 }
 
-[id^="scrollyteller"] > div > div:last-child {
+${CONTENT_SELECTOR}:last-child {
   margin-bottom: 125vh;
 }
 
-[id^="scrollyteller"] > div > div:first-child ~ div::before {
+${CONTENT_SELECTOR}::before {
   background-color: rgba(249, 249, 249, 0.9);
 }
 
-[id^="scrollyteller"] > div > div:first-child ~ div p {
-  color: #111;
+${CONTENT_SELECTOR} h2 {
+  text-align: center;
 }
 `;
