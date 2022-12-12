@@ -1,25 +1,25 @@
 {
-  "name": "interactive-ssm-turnout",
-  "version": "1.11.1",
-  "description": "A project generated from aunty's preact template.",
-  "license": "MIT",
-  "private": true,
-  "contributors": [
-    "Colin Gourlay <Gourlay.Colin@abc.net.au>"
-  ],
-  "scripts": {
-    "start": "aunty serve"
-  },
-  "devDependencies": {
-    "@abcnews/aunty": "^13.2.2",
-    "babel-plugin-styled-components": "^1.10.6"
-  },
-  "dependencies": {
-    "@abcnews/env-utils": "^3.1.0",
-    "@abcnews/scrollyteller": "^4.1.1",
-    "d3-request": "^1.0.6",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "styled-components": "^2.1.2"
-  }
+	"name": "interactive-ssm-turnout",
+	"version": "2.0.0",
+	"description": "A project generated from aunty's preact template.",
+	"license": "MIT",
+	"private": true,
+	"contributors": [
+		"Colin Gourlay <Gourlay.Colin@abc.net.au>"
+	],
+	"scripts": {
+		"start": "aunty serve"
+	},
+	"devDependencies": {
+		"@abcnews/aunty": "^13.2.2",
+		"babel-plugin-styled-components": "^1.10.6"
+	},
+	"dependencies": {
+		"@abcnews/env-utils": "^3.1.0",
+		"@abcnews/scrollyteller": "^4.1.1",
+		"d3-request": "^1.0.6",
+		"react": "^16.14.0",
+		"react-dom": "^16.14.0",
+		"styled-components": "^2.1.2"
+	}
 }
